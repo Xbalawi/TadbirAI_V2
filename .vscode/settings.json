@@ -1,0 +1,31 @@
+{
+  "css.lint.unknownAtRules": "ignore",
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "tailwindCSS.includeLanguages": {
+    "typescript": "javascript",
+    "typescriptreact": "javascript"
+  },
+  "atlascode.jira.enabled": true,
+  "atlascode.jira.jqlFilters": [
+    {
+      "id": "full-project-backlog",
+      "enabled": true,
+      "name": "📋 All Project Backlog Issues",
+      "query": "ORDER BY created DESC"
+    },
+    {
+      "id": "open-backlog-issues",
+      "enabled": true,
+      "name": "🔥 Open & In-Progress Issues",
+      "query": "statusCategory != Done ORDER BY priority DESC, created DESC"
+    },
+    {
+      "id": "my-assigned-issues",
+      "enabled": true,
+      "name": "👤 Assigned to Me",
+      "query": "assignee = currentUser() AND statusCategory != Done"
+    }
+  ]
+}
