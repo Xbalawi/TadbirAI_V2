@@ -1,0 +1,1186 @@
+{
+  "companiesStore": [
+    {
+      "id": "comp-1787081124495-1-cd1q",
+      "name": "Tadbir AI Demo",
+      "email": "demo@tadbir.ai"
+    },
+    {
+      "id": "e6104aa9-5a38-4fd5-a2dd-447438a52da2",
+      "name": "Ma Société",
+      "legal_name": "Ma Société",
+      "email": "contact@masociete.com",
+      "phone": "",
+      "address": "",
+      "city": "Casablanca",
+      "country": "Maroc",
+      "tax_identifier": "",
+      "ice": "",
+      "currency": "MAD",
+      "is_active": true,
+      "created_at": "2026-09-12T13:01:40.852Z"
+    },
+    {
+      "id": "870bacbd-007d-4586-bd74-aac8ffbab253",
+      "name": "Default Organization",
+      "legal_name": "Default Enterprise Ltd",
+      "email": "contact@defaultorganization.ma",
+      "phone": "",
+      "address": "",
+      "city": "Casablanca",
+      "country": "Maroc",
+      "tax_identifier": "",
+      "ice": "",
+      "currency": "USD",
+      "is_active": true,
+      "created_at": "2026-09-12T13:01:40.856Z"
+    },
+    {
+      "id": "comp-1789473480587-1-5pi5",
+      "name": "Test Enterprise",
+      "legal_name": "Test Enterprise",
+      "email": "contact@tadbir.ai",
+      "phone": "",
+      "address": "",
+      "city": "Casablanca",
+      "country": "Maroc",
+      "tax_identifier": "",
+      "ice": "",
+      "currency": "MAD",
+      "is_active": true,
+      "created_at": "2026-09-15T11:58:00.587Z"
+    }
+  ],
+  "clientsStore": [
+    {
+      "id": "cli-1787227127375-1-mr86",
+      "customer_code": "CLI-001",
+      "company_name": "Atlas Dynamics SA",
+      "contact_name": "Karim El Fassi EL FEHRI",
+      "email": "k.elfassi@atlasdynamics.com",
+      "phone": "+212 522 481 203",
+      "city": "Casablanca",
+      "country": "Maroc",
+      "metadata": {
+        "Fonction": "Directeur IT",
+        "Adresse": "12 Rue des Palmiers",
+        "Pays": "Maroc",
+        "Secteur d'activité": "Industrie manufacturière",
+        "Date d'inscription": "2021-03-14",
+        "Chiffre d'affaires annuel (EUR)": "185000",
+        "Statut": "Actif"
+      }
+    },
+    {
+      "id": "cli-1787227127426-2-5nl5",
+      "customer_code": "CLI-002",
+      "company_name": "Groupe Meridia",
+      "contact_name": "Sophie Laurent",
+      "email": "s.laurent@meridia-group.fr",
+      "phone": "+33 1 45 67 89 12",
+      "city": "Paris",
+      "country": "Maroc",
+      "metadata": {
+        "Fonction": "Responsable Achats",
+        "Adresse": "8 Avenue de la République",
+        "Pays": "France",
+        "Secteur d'activité": "Distribution",
+        "Date d'inscription": "2019-11-02",
+        "Chiffre d'affaires annuel (EUR)": "420000",
+        "Statut": "Actif"
+      }
+    },
+    {
+      "id": "cli-1787227127428-3-hyv4",
+      "customer_code": "CLI-003",
+      "company_name": "NovaRetail SARL",
+      "contact_name": "Youssef Bennani",
+      "email": "y.bennani@novaretail.ma",
+      "phone": "+212 537 772 145",
+      "city": "Rabat",
+      "country": "Maroc",
+      "metadata": {
+        "Fonction": "CTO",
+        "Adresse": "45 Boulevard Zerktouni",
+        "Pays": "Maroc",
+        "Secteur d'activité": "Commerce de détail",
+        "Date d'inscription": "2022-06-20",
+        "Chiffre d'affaires annuel (EUR)": "98000",
+        "Statut": "Actif"
+      }
+    },
+    {
+      "id": "cli-1787227127430-4-vcju",
+      "customer_code": "CLI-004",
+      "company_name": "Cabinet Dupont & Associés",
+      "contact_name": "Marie Dubois",
+      "email": "m.dubois@dupont-associes.fr",
+      "phone": "+33 4 78 12 34 56",
+      "city": "Lyon",
+      "country": "Maroc",
+      "metadata": {
+        "Fonction": "Associée Gérante",
+        "Adresse": "3 Place Bellecour",
+        "Pays": "France",
+        "Secteur d'activité": "Services juridiques",
+        "Date d'inscription": "2020-01-09",
+        "Chiffre d'affaires annuel (EUR)": "64000",
+        "Statut": "Actif"
+      }
+    },
+    {
+      "id": "cli-1787227127432-5-gusn",
+      "customer_code": "CLI-005",
+      "company_name": "Skyline Hospitality Group",
+      "contact_name": "Ahmed Tazi",
+      "email": "a.tazi@skylinehg.com",
+      "phone": "+212 661 220 984",
+      "city": "Casablanca",
+      "country": "Maroc",
+      "metadata": {
+        "Fonction": "Directeur des Systèmes d'Information",
+        "Adresse": "Zone Industrielle Sidi Maarouf",
+        "Pays": "Maroc",
+        "Secteur d'activité": "Hôtellerie",
+        "Date d'inscription": "2023-02-11",
+        "Chiffre d'affaires annuel (EUR)": "132000",
+        "Statut": "Actif"
+      }
+    },
+    {
+      "id": "cli-1787227127435-6-7yxe",
+      "customer_code": "CLI-006",
+      "company_name": "Ferrand Industries",
+      "contact_name": "Julien Moreau",
+      "email": "j.moreau@ferrand-ind.fr",
+      "phone": "+33 3 20 45 67 89",
+      "city": "Lille",
+      "country": "Maroc",
+      "metadata": {
+        "Fonction": "Responsable Production",
+        "Adresse": "17 Rue des Fabriques",
+        "Pays": "France",
+        "Secteur d'activité": "Industrie textile",
+        "Date d'inscription": "2018-09-30",
+        "Chiffre d'affaires annuel (EUR)": "256000",
+        "Statut": "Actif"
+      }
+    },
+    {
+      "id": "cli-1787227127436-7-3ucp",
+      "customer_code": "CLI-007",
+      "company_name": "Baraka Foods SA",
+      "contact_name": "Imane Chraibi",
+      "email": "i.chraibi@barakafoods.ma",
+      "phone": "+212 528 940 771",
+      "city": "Agadir",
+      "country": "Maroc",
+      "metadata": {
+        "Fonction": "Directrice Financière",
+        "Adresse": "Route de Marrakech, Km 8",
+        "Pays": "Maroc",
+        "Secteur d'activité": "Agroalimentaire",
+        "Date d'inscription": "2022-10-05",
+        "Chiffre d'affaires annuel (EUR)": "77000",
+        "Statut": "Actif"
+      }
+    },
+    {
+      "id": "cli-1787227127437-8-u7ph",
+      "customer_code": "CLI-008",
+      "company_name": "Techno Parc Solutions",
+      "contact_name": "Nicolas Petit",
+      "email": "n.petit@technoparc.fr",
+      "phone": "+33 5 56 78 90 12",
+      "city": "Bordeaux",
+      "country": "Maroc",
+      "metadata": {
+        "Fonction": "Chef de Projet Digital",
+        "Adresse": "22 Cours du Chapeau Rouge",
+        "Pays": "France",
+        "Secteur d'activité": "Conseil en technologies",
+        "Date d'inscription": "2021-07-18",
+        "Chiffre d'affaires annuel (EUR)": "112000",
+        "Statut": "Actif"
+      }
+    },
+    {
+      "id": "cli-1787227127441-9-fckn",
+      "customer_code": "CLI-009",
+      "company_name": "Al Amana Assurance",
+      "contact_name": "Rachid Amrani",
+      "email": "r.amrani@alamana-assurance.ma",
+      "phone": "+212 522 998 442",
+      "city": "Casablanca",
+      "country": "Maroc",
+      "metadata": {
+        "Fonction": "Directeur des Opérations",
+        "Adresse": "Twin Center, Tour Ouest",
+        "Pays": "Maroc",
+        "Secteur d'activité": "Assurance",
+        "Date d'inscription": "2020-12-01",
+        "Chiffre d'affaires annuel (EUR)": "340000",
+        "Statut": "Actif"
+      }
+    },
+    {
+      "id": "cli-1787227127443-10-f0u8",
+      "customer_code": "CLI-010",
+      "company_name": "Vertex Pharma France",
+      "contact_name": "Camille Girard",
+      "email": "c.girard@vertexpharma.fr",
+      "phone": "+33 1 88 23 45 67",
+      "city": "Paris",
+      "country": "Maroc",
+      "metadata": {
+        "Fonction": "Responsable IT",
+        "Adresse": "56 Rue de la Santé",
+        "Pays": "France",
+        "Secteur d'activité": "Pharmaceutique",
+        "Date d'inscription": "2023-05-22",
+        "Chiffre d'affaires annuel (EUR)": "198000",
+        "Statut": "Actif"
+      }
+    },
+    {
+      "id": "cli-1787227127447-11-vg8e",
+      "customer_code": "CLI-011",
+      "company_name": "Ocean Blue Logistics",
+      "contact_name": "Hamza Idrissi",
+      "email": "h.idrissi@oceanblue.ma",
+      "phone": "+212 539 501 288",
+      "city": "Tanger",
+      "country": "Maroc",
+      "metadata": {
+        "Fonction": "Directeur Logistique",
+        "Adresse": "Port de Tanger Med",
+        "Pays": "Maroc",
+        "Secteur d'activité": "Transport & Logistique",
+        "Date d'inscription": "2019-04-16",
+        "Chiffre d'affaires annuel (EUR)": "145000",
+        "Statut": "Suspendu"
+      }
+    },
+    {
+      "id": "cli-1787227127448-12-708h",
+      "customer_code": "CLI-012",
+      "company_name": "Groupe Renaissance Media",
+      "contact_name": "Laura Simon",
+      "email": "l.simon@renaissance-media.fr",
+      "phone": "+33 2 40 12 34 56",
+      "city": "Nantes",
+      "country": "Maroc",
+      "metadata": {
+        "Fonction": "Directrice Digitale",
+        "Adresse": "9 Quai des Chantiers",
+        "Pays": "France",
+        "Secteur d'activité": "Médias",
+        "Date d'inscription": "2022-01-30",
+        "Chiffre d'affaires annuel (EUR)": "88000",
+        "Statut": "Actif"
+      }
+    },
+    {
+      "id": "cli-1787227127451-13-0qz3",
+      "customer_code": "CLI-013",
+      "company_name": "Cristal Bank Maroc",
+      "contact_name": "Nadia Berrada",
+      "email": "n.berrada@cristalbank.ma",
+      "phone": "+212 522 305 761",
+      "city": "Casablanca",
+      "country": "Maroc",
+      "metadata": {
+        "Fonction": "Responsable Sécurité Informatique",
+        "Adresse": "Boulevard Abdelmoumen",
+        "Pays": "Maroc",
+        "Secteur d'activité": "Services bancaires",
+        "Date d'inscription": "2017-08-11",
+        "Chiffre d'affaires annuel (EUR)": "510000",
+        "Statut": "Actif"
+      }
+    },
+    {
+      "id": "cli-1787227127453-14-ls23",
+      "customer_code": "CLI-014",
+      "company_name": "Bâtiment & Co",
+      "contact_name": "Pierre Lefevre",
+      "email": "p.lefevre@batimentco.fr",
+      "phone": "+33 6 12 45 78 90",
+      "city": "Marseille",
+      "country": "Maroc",
+      "metadata": {
+        "Fonction": "Gérant",
+        "Adresse": "4 Rue du Chantier",
+        "Pays": "France",
+        "Secteur d'activité": "BTP",
+        "Date d'inscription": "2023-09-01",
+        "Chiffre d'affaires annuel (EUR)": "52000",
+        "Statut": "Prospect"
+      }
+    },
+    {
+      "id": "cli-1787227127455-15-8ie3",
+      "customer_code": "CLI-015",
+      "company_name": "Sahara Energy Corp",
+      "contact_name": "Yassine El Amrani",
+      "email": "y.elamrani@saharaenergy.ma",
+      "phone": "+212 528 611 093",
+      "city": "Agadir",
+      "country": "Maroc",
+      "metadata": {
+        "Fonction": "Directeur Innovation",
+        "Adresse": "Zone Franche, Lot 12",
+        "Pays": "Maroc",
+        "Secteur d'activité": "Énergie renouvelable",
+        "Date d'inscription": "2021-11-27",
+        "Chiffre d'affaires annuel (EUR)": "276000",
+        "Statut": "Actif"
+      }
+    },
+    {
+      "id": "cli-1788705422694-1-ixig",
+      "customer_code": "CL-6118",
+      "company_name": "nommé Groupe",
+      "contact_name": "Contact nommé Groupe",
+      "email": "",
+      "phone": "+212 650821107",
+      "city": "Casablanca",
+      "country": "Maroc",
+      "metadata": {}
+    }
+  ],
+  "suppliersStore": [
+    {
+      "id": "sup-1787230169406-1-klsj",
+      "supplier_code": "FRN-001",
+      "company_name": "4.6",
+      "contact_name": "Marc Fontaine",
+      "email": "m.fontaine@techcomponents.eu",
+      "phone": "+33 1 42 33 44 55",
+      "city": "Roissy",
+      "country": "Maroc",
+      "metadata": {
+        "Adresse": "14 Zone Industrielle Nord",
+        "Pays": "France",
+        "Catégorie de produits": "Composants électroniques",
+        "Délai de livraison (jours)": "12",
+        "Conditions de paiement": "30 jours net",
+        "Statut": "Actif"
+      }
+    },
+    {
+      "id": "sup-1787230169412-2-3hc8",
+      "supplier_code": "FRN-002",
+      "company_name": "4.2",
+      "contact_name": "Salma Ouazzani",
+      "email": "s.ouazzani@mhd.ma",
+      "phone": "+212 522 887 344",
+      "city": "Casablanca",
+      "country": "Maroc",
+      "metadata": {
+        "Adresse": "Zone Industrielle Ain Sebaa",
+        "Pays": "Maroc",
+        "Catégorie de produits": "Matériel informatique",
+        "Délai de livraison (jours)": "7",
+        "Conditions de paiement": "45 jours net",
+        "Statut": "Actif"
+      }
+    },
+    {
+      "id": "sup-1787230169424-3-rlzp",
+      "supplier_code": "FRN-003",
+      "company_name": "4.8",
+      "contact_name": "Anna Weber",
+      "email": "a.weber@cloudserve.de",
+      "phone": "+49 30 1234 5678",
+      "city": "Berlin",
+      "country": "Maroc",
+      "metadata": {
+        "Adresse": "Hauptstrasse 22",
+        "Pays": "Allemagne",
+        "Catégorie de produits": "Services cloud & hébergement",
+        "Délai de livraison (jours)": "3",
+        "Conditions de paiement": "Paiement à réception",
+        "Statut": "Actif"
+      }
+    },
+    {
+      "id": "sup-1787230169427-4-9tmp",
+      "supplier_code": "FRN-004",
+      "company_name": "4.5",
+      "contact_name": "Thomas Richard",
+      "email": "t.richard@datasecure-net.fr",
+      "phone": "+33 4 91 22 33 44",
+      "city": "Marseille",
+      "country": "Maroc",
+      "metadata": {
+        "Adresse": "78 Rue de l'Innovation",
+        "Pays": "France",
+        "Catégorie de produits": "Cybersécurité",
+        "Délai de livraison (jours)": "5",
+        "Conditions de paiement": "30 jours net",
+        "Statut": "Actif"
+      }
+    },
+    {
+      "id": "sup-1787230169434-5-npzb",
+      "supplier_code": "FRN-005",
+      "company_name": "3.9",
+      "contact_name": "Mehdi Alaoui",
+      "email": "m.alaoui@atlas-composants.ma",
+      "phone": "+212 537 664 981",
+      "city": "Rabat",
+      "country": "Maroc",
+      "metadata": {
+        "Adresse": "Route de Salé, Km 3",
+        "Pays": "Maroc",
+        "Catégorie de produits": "Composants électroniques",
+        "Délai de livraison (jours)": "15",
+        "Conditions de paiement": "60 jours net",
+        "Statut": "Actif"
+      }
+    },
+    {
+      "id": "sup-1787230169439-6-6jvk",
+      "supplier_code": "FRN-006",
+      "company_name": "4",
+      "contact_name": "Claire Bertrand",
+      "email": "c.bertrand@printpro.fr",
+      "phone": "+33 2 99 55 66 77",
+      "city": "Rennes",
+      "country": "Maroc",
+      "metadata": {
+        "Adresse": "5 Avenue de l'Industrie",
+        "Pays": "France",
+        "Catégorie de produits": "Imprimantes & consommables",
+        "Délai de livraison (jours)": "10",
+        "Conditions de paiement": "30 jours net",
+        "Statut": "Actif"
+      }
+    },
+    {
+      "id": "sup-1787230169442-7-x6za",
+      "supplier_code": "FRN-007",
+      "company_name": "4.7",
+      "contact_name": "Othmane Kabbaj",
+      "email": "o.kabbaj@softlogic.ma",
+      "phone": "+212 528 334 219",
+      "city": "Agadir",
+      "country": "Maroc",
+      "metadata": {
+        "Adresse": "Technopark, Bureau 214",
+        "Pays": "Maroc",
+        "Catégorie de produits": "Licences logicielles",
+        "Délai de livraison (jours)": "2",
+        "Conditions de paiement": "Paiement à réception",
+        "Statut": "Actif"
+      }
+    },
+    {
+      "id": "sup-1787230169444-8-h1by",
+      "supplier_code": "FRN-008",
+      "company_name": "4.1",
+      "contact_name": "Laurent Mercier",
+      "email": "l.mercier@eurocable.fr",
+      "phone": "+33 3 88 44 55 66",
+      "city": "Strasbourg",
+      "country": "Maroc",
+      "metadata": {
+        "Adresse": "31 Rue du Commerce",
+        "Pays": "France",
+        "Catégorie de produits": "Câblage & réseaux",
+        "Délai de livraison (jours)": "9",
+        "Conditions de paiement": "30 jours net",
+        "Statut": "Actif"
+      }
+    },
+    {
+      "id": "sup-1787230169447-9-oojr",
+      "supplier_code": "FRN-009",
+      "company_name": "3.7",
+      "contact_name": "Sara Ennaciri",
+      "email": "s.ennaciri@greentechbat.ma",
+      "phone": "+212 522 456 780",
+      "city": "Casablanca",
+      "country": "Maroc",
+      "metadata": {
+        "Adresse": "Zone Industrielle Bouskoura",
+        "Pays": "Maroc",
+        "Catégorie de produits": "Batteries & énergie",
+        "Délai de livraison (jours)": "20",
+        "Conditions de paiement": "45 jours net",
+        "Statut": "En observation"
+      }
+    },
+    {
+      "id": "sup-1787230169449-10-utsw",
+      "supplier_code": "FRN-010",
+      "company_name": "4.4",
+      "contact_name": "David Lambert",
+      "email": "d.lambert@pixeldisplay.com",
+      "phone": "+33 1 55 66 77 88",
+      "city": "Paris",
+      "country": "Maroc",
+      "metadata": {
+        "Adresse": "10 Rue de l'Écran",
+        "Pays": "France",
+        "Catégorie de produits": "Écrans & affichage",
+        "Délai de livraison (jours)": "6",
+        "Conditions de paiement": "30 jours net",
+        "Statut": "Actif"
+      }
+    }
+  ],
+  "productsStore": [
+    {
+      "id": "prod-1787230439767-21-odyu",
+      "sku": "PRD-001",
+      "name": "NexBook Pro 14",
+      "description": "",
+      "selling_price": 1318.8,
+      "quantity": 42,
+      "unit": "unité",
+      "category_name": "Général",
+      "track_inventory": true,
+      "is_active": true,
+      "metadata": {}
+    },
+    {
+      "id": "prod-1787230439769-22-wua7",
+      "sku": "PRD-002",
+      "name": "NexBook Air 13",
+      "description": "",
+      "selling_price": 1018.8,
+      "quantity": 65,
+      "unit": "unité",
+      "category_name": "Général",
+      "track_inventory": true,
+      "is_active": true,
+      "metadata": {}
+    },
+    {
+      "id": "prod-1787230439770-23-a2ab",
+      "sku": "PRD-003",
+      "name": "ServerNode X200",
+      "description": "",
+      "selling_price": 5100,
+      "quantity": 8,
+      "unit": "unité",
+      "category_name": "Général",
+      "track_inventory": true,
+      "is_active": true,
+      "metadata": {}
+    },
+    {
+      "id": "prod-1787230439772-24-m802",
+      "sku": "PRD-004",
+      "name": "CloudSuite Business",
+      "description": "",
+      "selling_price": 106.8,
+      "quantity": 500,
+      "unit": "unité",
+      "category_name": "Général",
+      "track_inventory": true,
+      "is_active": true,
+      "metadata": {}
+    },
+    {
+      "id": "prod-1787230439776-25-pga2",
+      "sku": "PRD-005",
+      "name": "SecureShield Firewall",
+      "description": "",
+      "selling_price": 1980,
+      "quantity": 15,
+      "unit": "unité",
+      "category_name": "Général",
+      "track_inventory": true,
+      "is_active": true,
+      "metadata": {}
+    },
+    {
+      "id": "prod-1787230439778-26-7kq4",
+      "sku": "PRD-006",
+      "name": "NetSwitch 24P",
+      "description": "",
+      "selling_price": 384,
+      "quantity": 30,
+      "unit": "unité",
+      "category_name": "Général",
+      "track_inventory": true,
+      "is_active": true,
+      "metadata": {}
+    },
+    {
+      "id": "prod-1787230439782-27-p3e8",
+      "sku": "PRD-007",
+      "name": "VisionScreen 27 4K",
+      "description": "",
+      "selling_price": 454.8,
+      "quantity": 55,
+      "unit": "unité",
+      "category_name": "Général",
+      "track_inventory": true,
+      "is_active": true,
+      "metadata": {}
+    },
+    {
+      "id": "prod-1787230439784-28-05vv",
+      "sku": "PRD-008",
+      "name": "PowerCell UPS 1500",
+      "description": "",
+      "selling_price": 492,
+      "quantity": 20,
+      "unit": "unité",
+      "category_name": "Général",
+      "track_inventory": true,
+      "is_active": true,
+      "metadata": {}
+    },
+    {
+      "id": "prod-1787230439787-29-ca62",
+      "sku": "PRD-009",
+      "name": "PrintMaster LaserJet X5",
+      "description": "",
+      "selling_price": 672,
+      "quantity": 18,
+      "unit": "unité",
+      "category_name": "Général",
+      "track_inventory": true,
+      "is_active": true,
+      "metadata": {}
+    },
+    {
+      "id": "prod-1787230439792-30-u19h",
+      "sku": "PRD-010",
+      "name": "CloudHost Dédié 32Go",
+      "description": "",
+      "selling_price": 174,
+      "quantity": 999,
+      "unit": "unité",
+      "category_name": "Général",
+      "track_inventory": true,
+      "is_active": true,
+      "metadata": {}
+    },
+    {
+      "id": "prod-1787230439795-31-l4lm",
+      "sku": "PRD-011",
+      "name": "NexTab 10 Pro",
+      "description": "",
+      "selling_price": 550.8,
+      "quantity": 38,
+      "unit": "unité",
+      "category_name": "Général",
+      "track_inventory": true,
+      "is_active": true,
+      "metadata": {}
+    },
+    {
+      "id": "prod-1787230439797-32-z59e",
+      "sku": "PRD-012",
+      "name": "DataVault Backup 4To",
+      "description": "",
+      "selling_price": 828,
+      "quantity": 12,
+      "unit": "unité",
+      "category_name": "Général",
+      "track_inventory": true,
+      "is_active": true,
+      "metadata": {}
+    },
+    {
+      "id": "prod-1787230439798-33-7kb7",
+      "sku": "PRD-013",
+      "name": "AccessPoint WiFi6 Pro",
+      "description": "",
+      "selling_price": 252,
+      "quantity": 44,
+      "unit": "unité",
+      "category_name": "Général",
+      "track_inventory": true,
+      "is_active": true,
+      "metadata": {}
+    },
+    {
+      "id": "prod-1787230439800-34-j1w4",
+      "sku": "PRD-014",
+      "name": "SecureID Badge System",
+      "description": "",
+      "selling_price": 1176,
+      "quantity": 10,
+      "unit": "unité",
+      "category_name": "Général",
+      "track_inventory": true,
+      "is_active": true,
+      "metadata": {}
+    },
+    {
+      "id": "prod-1787230439803-35-iipc",
+      "sku": "PRD-015",
+      "name": "ErgoDesk Station",
+      "description": "",
+      "selling_price": 636,
+      "quantity": 9,
+      "unit": "unité",
+      "category_name": "Général",
+      "track_inventory": true,
+      "is_active": true,
+      "metadata": {}
+    },
+    {
+      "id": "prod-1787230439807-36-puo6",
+      "sku": "PRD-016",
+      "name": "NexPhone Business 5G",
+      "description": "",
+      "selling_price": 874.8,
+      "quantity": 60,
+      "unit": "unité",
+      "category_name": "Général",
+      "track_inventory": true,
+      "is_active": true,
+      "metadata": {}
+    },
+    {
+      "id": "prod-1787230439812-37-hgca",
+      "sku": "PRD-017",
+      "name": "CloudSuite Enterprise",
+      "description": "",
+      "selling_price": 178.8,
+      "quantity": 300,
+      "unit": "unité",
+      "category_name": "Général",
+      "track_inventory": true,
+      "is_active": true,
+      "metadata": {}
+    },
+    {
+      "id": "prod-1787230439815-38-1id8",
+      "sku": "PRD-018",
+      "name": "BatteryPack Solar 5kWh",
+      "description": "",
+      "selling_price": 2520,
+      "quantity": 6,
+      "unit": "unité",
+      "category_name": "Général",
+      "track_inventory": true,
+      "is_active": true,
+      "metadata": {}
+    },
+    {
+      "id": "prod-1787230439817-39-pbuk",
+      "sku": "PRD-019",
+      "name": "ServerNode X100",
+      "description": "",
+      "selling_price": 2940,
+      "quantity": 11,
+      "unit": "unité",
+      "category_name": "Général",
+      "track_inventory": true,
+      "is_active": true,
+      "metadata": {}
+    },
+    {
+      "id": "prod-1787230439819-40-mcv8",
+      "sku": "PRD-020",
+      "name": "VisionScreen 24 FHD",
+      "description": "",
+      "selling_price": 214.8,
+      "quantity": 70,
+      "unit": "unité",
+      "category_name": "Général",
+      "track_inventory": true,
+      "is_active": true,
+      "metadata": {}
+    }
+  ],
+  "quotationsStore": [
+    {
+      "id": "dev-1787234589292-1-ioio",
+      "quotation_number": "DEV-2026-0090",
+      "client_name": "Cristal Bank Maroc",
+      "status": "Brouillon",
+      "total_amount": "11856",
+      "date": "2026-03-27",
+      "lignes": [
+        {
+          "description": "ServerNode X200 — Serveur rack 2U bi-processeur (x2)",
+          "quantite": 2,
+          "prix_unitaire": 4250
+        },
+        {
+          "description": "DataVault Backup 4To — Solution de sauvegarde NAS (x2)",
+          "quantite": 2,
+          "prix_unitaire": 690
+        }
+      ]
+    }
+  ],
+  "invoicesStore": [
+    {
+      "id": "fac-1787227827048-1-9ofd",
+      "invoice_number": "FAC-9039",
+      "client_name": "NovaRetail SARL 0",
+      "status": "Annulée",
+      "total_amount": 18000,
+      "date": "2026-08-20",
+      "lignes": [
+        {
+          "description": "Conception & développement web",
+          "quantite": 1,
+          "prix_unitaire": 15000
+        }
+      ],
+      "client": "NovaRetail SARL 0",
+      "statut": "Annulée",
+      "montant": 18000
+    },
+    {
+      "id": "fac-1787230503971-1-3czv",
+      "invoice_number": "TXN-230500118",
+      "client_name": "Client Comptoir",
+      "status": "Payée",
+      "total_amount": 9053.28,
+      "date": "2026-08-20",
+      "lignes": [
+        {
+          "description": "NexBook Pro 14",
+          "quantite": 1,
+          "prix_unitaire": 1318.8
+        },
+        {
+          "description": "NexBook Air 13",
+          "quantite": 1,
+          "prix_unitaire": 1018.8
+        },
+        {
+          "description": "ServerNode X200",
+          "quantite": 1,
+          "prix_unitaire": 5100
+        },
+        {
+          "description": "CloudSuite Business",
+          "quantite": 1,
+          "prix_unitaire": 106.8
+        }
+      ]
+    },
+    {
+      "id": "fac-1787231047124-1-59tw",
+      "invoice_number": "TXN-231038783",
+      "client_name": "Client Comptoir",
+      "status": "Payée",
+      "total_amount": 6248.16,
+      "date": "2026-08-20",
+      "lignes": [
+        {
+          "description": "ServerNode X200",
+          "quantite": 1,
+          "prix_unitaire": 5100
+        },
+        {
+          "description": "CloudSuite Business",
+          "quantite": 1,
+          "prix_unitaire": 106.8
+        }
+      ]
+    },
+    {
+      "id": "fac-1787231048776-2-ej38",
+      "invoice_number": "TXN-231047397",
+      "client_name": "Client Comptoir",
+      "status": "Payée",
+      "total_amount": 6248.16,
+      "date": "2026-08-20",
+      "lignes": [
+        {
+          "description": "ServerNode X200",
+          "quantite": 1,
+          "prix_unitaire": 5100
+        },
+        {
+          "description": "CloudSuite Business",
+          "quantite": 1,
+          "prix_unitaire": 106.8
+        }
+      ]
+    },
+    {
+      "id": "fac-1787231090055-1-xwv6",
+      "invoice_number": "TXN-231089614",
+      "client_name": "Client Comptoir",
+      "status": "Payée",
+      "total_amount": 6248.16,
+      "date": "2026-08-20",
+      "lignes": [
+        {
+          "description": "ServerNode X200",
+          "quantite": 1,
+          "prix_unitaire": 5100
+        },
+        {
+          "description": "CloudSuite Business",
+          "quantite": 1,
+          "prix_unitaire": 106.8
+        }
+      ]
+    },
+    {
+      "id": "fac-1787231353198-1-5yvx",
+      "invoice_number": "TXN-231352484",
+      "client_name": "Client Comptoir",
+      "status": "Payée",
+      "total_amount": 7342.56,
+      "date": "2026-08-20",
+      "lignes": [
+        {
+          "description": "NexBook Air 13",
+          "quantite": 1,
+          "prix_unitaire": 1018.8
+        },
+        {
+          "description": "ServerNode X200",
+          "quantite": 1,
+          "prix_unitaire": 5100
+        }
+      ]
+    },
+    {
+      "id": "fac-1787232171574-1-o72h",
+      "invoice_number": "FAC-8315",
+      "client_name": "Atlas Dynamics SA",
+      "status": "Envoyée",
+      "total_amount": 18000,
+      "date": "2026-08-20",
+      "lignes": [
+        {
+          "id": 1,
+          "article": "Prestation de service",
+          "description": "Conception & développement web",
+          "qte": 1,
+          "prix": 15000,
+          "remise": 0
+        }
+      ]
+    },
+    {
+      "id": "fac-1787232316179-1-ftxb",
+      "invoice_number": "FAC-3990",
+      "client_name": "Client Comptoir",
+      "status": "Envoyée",
+      "total_amount": 763.2,
+      "date": "2026-08-20",
+      "lignes": [
+        {
+          "id": 1,
+          "article": "ErgoDesk Station",
+          "description": "Conception & développement web",
+          "qte": 1,
+          "prix": 636,
+          "remise": 0
+        }
+      ]
+    }
+  ],
+  "employeesStore": [
+    {
+      "prenom": "MERYEM",
+      "nom": "ELOSMANI",
+      "cin": "D677542",
+      "poste": "AI ENGINEER",
+      "departement": "INFO",
+      "salaire_base": 50000,
+      "date_embauche": "2026-08-20",
+      "statut": "Actif",
+      "id": "EMP-009196"
+    }
+  ],
+  "avoirsStore": [],
+  "depensesStore": [
+    {
+      "titre": "MATERIAL INFO",
+      "fournisseur": "DINDI",
+      "categorie": "Fournitures & Bureau",
+      "modePaiement": "Virement Bancaire",
+      "referenceFacture": "",
+      "statut": "Payée",
+      "status": "Payée",
+      "date": "2026-08-20",
+      "montantHt": 1000,
+      "taxePct": 20,
+      "tva": 200,
+      "montant": 1200,
+      "total_amount": 1200,
+      "notes": "",
+      "id": "DEP-1787230231902"
+    }
+  ],
+  "bulletinsStore": [],
+  "bonsCommandeStore": [
+    {
+      "fournisseur": "HHHHH",
+      "statut": "Envoyé",
+      "dateEmission": "2026-08-20",
+      "livraisonPrevue": "2026-08-20",
+      "montant": 900,
+      "articles": [
+        {
+          "nom": "Article général",
+          "qte": 1,
+          "recu": 0,
+          "prixUnitaire": 900
+        }
+      ],
+      "id": "BC-1787229370701",
+      "status": "Envoyé"
+    }
+  ],
+  "equipeStore": [
+    {
+      "id": "EQ-1001",
+      "nom": "Meryem El Osmani",
+      "email": "maryamelosmani@gmail.com",
+      "role": "Administrateur",
+      "statut": "Actif"
+    },
+    {
+      "nom": "MERYEM ",
+      "email": "elosmanimimya@gmail.com",
+      "role": "Administrateur",
+      "statut": "Actif",
+      "id": "EQ-1789042373523"
+    },
+    {
+      "nom": "Nissrine",
+      "email": "abwnissrine@gmail.com",
+      "role": "Administrateur",
+      "statut": "Actif",
+      "id": "EQ-1789120899632"
+    },
+    {
+      "nom": "Meryem test ",
+      "email": "m.elosmani@edu.umi.ac.ma",
+      "role": "Administrateur",
+      "statut": "Actif",
+      "id": "EQ-1789207432157"
+    },
+    {
+      "id": "EQ-1789387884114",
+      "nom": "Master Admin",
+      "email": "admin@tadbir.ai",
+      "role": "Administrateur",
+      "statut": "Actif"
+    }
+  ],
+  "stockMovementsStore": [],
+  "usersStore": [
+    {
+      "id": "USR-1789120899632",
+      "email": "abwnissrine@gmail.com",
+      "password": "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9",
+      "nom": "Nissrine",
+      "role": "Administrateur",
+      "company": "Tadbir AI Enterprise",
+      "emailVerified": true
+    },
+    {
+      "id": "USR-1789041873007",
+      "email": "maryamelosmani@gmail.com",
+      "password": "1fcf12165120e3c17b1d9da804adca9881d0bdc4d7a96c6929b07dfca49417ee",
+      "nom": "MERYEM EL OSMANI",
+      "role": "Administrateur",
+      "company": "Tadbir AI Enterprise",
+      "emailVerified": true
+    },
+    {
+      "id": "USR-1789042418339",
+      "email": "elosmanimimya@gmail.com",
+      "password": "7e1430d617fedfb5dc2d910ec84c828b80ef773fa99e03aa741fec939dd888f3",
+      "nom": "MERYEM",
+      "role": "Administrateur",
+      "company": "Tadbir AI Enterprise",
+      "emailVerified": true
+    },
+    {
+      "id": "USR-1789205730900",
+      "email": "test.member.200@tadbir.ai",
+      "password": "f87bc662e206693ae54f76020116ddb9137ea6e8c175e8c06b8112fdf3f48519",
+      "nom": "Test Collaborateur",
+      "role": "Comptable",
+      "company": "Tadbir AI Enterprise",
+      "emailVerified": true
+    },
+    {
+      "id": "USR-1789207484481",
+      "email": "m.elosmani@edu.umi.ac.ma",
+      "password": "7e1430d617fedfb5dc2d910ec84c828b80ef773fa99e03aa741fec939dd888f3",
+      "nom": "MERYEM TEST",
+      "role": "Administrateur",
+      "company": "Tadbir AI Enterprise",
+      "emailVerified": true
+    },
+    {
+      "id": "USR-1789387884114",
+      "email": "admin@tadbir.ai",
+      "password": "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9",
+      "nom": "Master Admin",
+      "role": "Administrateur",
+      "company": "Default Organization",
+      "emailVerified": true
+    },
+    {
+      "id": "USR-1789472415030",
+      "email": "nouveau.client@tadbir.ma",
+      "password": "b36350d29850768a4e5da922253a5cc4b4190586a4c539428c94defc8937140a",
+      "nom": "Nouveau Client",
+      "role": "Comptable",
+      "company": "Tadbir AI Enterprise",
+      "emailVerified": true
+    }
+  ],
+  "companySettingsStore": {
+    "nom": "Atlas Tech",
+    "adresse": "",
+    "telephone": "",
+    "email": "",
+    "site_web": "",
+    "secteur": "Technologie & Services",
+    "pays": "France",
+    "devise": "EUR",
+    "formatDate": "DD/MM/YYYY",
+    "tva_rate": "20",
+    "afficher_tva": true,
+    "montant_lettres": true,
+    "emailAlerts": true,
+    "whatsappAlerts": true,
+    "weeklyReport": true,
+    "stockAlerts": true,
+    "twoFactor": false,
+    "sessionTimeout": "30",
+    "identifiant_fiscal": "",
+    "ice": "",
+    "registre_commerce": "",
+    "siren": "",
+    "siret": "",
+    "rcs": "",
+    "tva_intra": "",
+    "rib": "",
+    "iban": "",
+    "swift": "",
+    "smtp_host": "",
+    "smtp_port": 587,
+    "smtp_user": "",
+    "smtp_password": "",
+    "twilio_account_sid": "",
+    "twilio_auth_token": "",
+    "twilio_phone_number": "",
+    "whatsappPhoneNumber": "+212 684 836 656",
+    "whatsappDefaultCountryCode": "212",
+    "whatsappSendMode": "web",
+    "whatsappFactureTemplate": "Bonjour *{client}*,\n\nVoici votre facture *{numero}* d'un montant de *{montant} MAD*.\n📅 Date d'échéance : {echeance}\n\nMerci pour votre confiance !\n_Tadbir AI_",
+    "whatsappRelanceTemplate": "Rappel : Bonjour *{client}*,\n\nSauf erreur de notre part, la facture *{numero}* d'un montant de *{montant} MAD* venant à échéance le {echeance} est toujours en attente de règlement.\n\nMerci de procéder au virement dès que possible.",
+    "whatsappDevisTemplate": "Bonjour *{client}*,\n\nVeuillez trouver ci-joint votre devis *{numero}* d'un montant de *{montant} MAD* (Valable jusqu'au {echeance}).\n\nN'hésitez pas à nous contacter pour toute question !",
+    "whatsappRecuTemplate": "Bonjour *{client}*,\n\nNous confirmons la réception de votre règlement pour la facture *{numero}* ({montant} MAD).\n\nMerci beaucoup pour votre fidélité !",
+    "factureTemplateConfig": null
+  },
+  "supportTicketsStore": []
+}
