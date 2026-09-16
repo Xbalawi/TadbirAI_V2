@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Hub | Fawatir</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+    :root {
+        --bg-color: #0b0f19;
+        --card-bg: rgba(255, 255, 255, 0.03);
+        --card-border: rgba(255, 255, 255, 0.08);
+        --text-color: #f1f5f9;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+    }
+    body {
+        margin: 0;
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-image: radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.15), transparent 25%),
+                          radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.15), transparent 25%);
+        background-attachment: fixed;
+    }
+    .header {
+        text-align: center;
+        padding: 60px 20px 40px;
+    }
+    .header h1 {
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin: 0 0 10px;
+        background: var(--gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: -0.5px;
+    }
+    .header p {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        margin: 0;
+        max-width: 600px;
+        line-height: 1.5;
+    }
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 40px;
+        width: 100%;
+        max-width: 1100px;
+        padding: 0 20px 60px;
+        justify-content: center;
+        align-items: flex-start;
+    }
+    .card {
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 20px;
+        padding: 30px;
+        flex: 1 1 400px;
+        max-width: 500px;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+    }
+    .card h2 {
+        margin-top: 0;
+        font-size: 1.4rem;
+        font-weight: 600;
+        border-bottom: 1px solid var(--card-border);
+        padding-bottom: 15px;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .drop-zone {
+        border: 2px dashed var(--card-border);
+        border-radius: 14px;
+        padding: 50px 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        background: rgba(0,0,0,0.2);
+    }
+    .drop-zone:hover, .drop-zone.dragover {
+        border-color: var(--accent);
+        background: rgba(59, 130, 246, 0.05);
+    }
+    .drop-zone input[type="file"] {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        cursor: pointer;
+    }
+    .drop-zone .icon {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        display: block;
+    }
+    .drop-zone p {
+        margin: 0;
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        font-weight: 500;
+    }
+    .result {
+        margin-top: 25px;
+        background: #0f172a;
+        border: 1px solid var(--card-border);
+        border-radius: 12px;
+        padding: 20px;
+        font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+        font-size: 0.85rem;
+        color: #a78bfa;
+        white-space: pre-wrap;
+        max-height: 350px;
+        overflow-y: auto;
+        display: none;
+        line-height: 1.5;
+        box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
+    }
+    .result.error {
+        color: #ef4444;
+    }
+    .spinner {
+        display: none;
+        margin: 30px auto 10px;
+        width: 35px;
+        height: 35px;
+        border: 3px solid rgba(255,255,255,0.1);
+        border-radius: 50%;
+        border-top-color: var(--accent);
+        animation: spin 1s ease-in-out infinite;
+    }
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); border-radius: 8px; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 8px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
+
+    /* Table Styles */
+    .table-container {
+        margin-top: 15px;
+        overflow-x: auto;
+        border-radius: 8px;
+        border: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0,0,0,0.2);
+    }
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.9rem;
+    }
+    .data-table th, .data-table td {
+        padding: 12px 16px;
+        text-align: left;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .data-table th {
+        background: rgba(255,255,255,0.03);
+        color: var(--text-muted);
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+    }
+    .data-table tr:last-child td {
+        border-bottom: none;
+    }
+    .data-table td {
+        color: #e2e8f0;
+    }
+    .badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        background: rgba(59, 130, 246, 0.2);
+        color: #60a5fa;
+        margin-bottom: 15px;
+    }
+    .mapping-original {
+        color: #94a3b8;
+        font-size: 0.8rem;
+        display: block;
+        margin-bottom: 4px;
+    }
+    .mapping-field {
+        color: #34d399;
+        font-family: 'Menlo', monospace;
+        font-size: 0.85rem;
+    }
+    .analysis-box {
+        background: rgba(139, 92, 246, 0.1);
+        border-left: 4px solid #8b5cf6;
+        padding: 15px 20px;
+        margin-bottom: 20px;
+        border-radius: 0 8px 8px 0;
+        color: #e2e8f0;
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+    .analysis-box strong {
+        color: #a78bfa;
+        display: block;
+        margin-bottom: 5px;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Fawatir AI Hub</h1>
+    <p>Test the Gemini Vision engine for Invoice OCR and Spreadsheet Mapping in real-time.</p>
+</div>
+
+<div class="container">
+    <!-- OCR Card -->
+    <div class="card">
+        <h2>🧾 Invoice OCR</h2>
+        <div class="drop-zone" id="ocr-zone">
+            <input type="file" id="ocr-input" accept="image/*,.pdf">
+            <span class="icon">📸</span>
+            <p>Drag & drop an invoice image or PDF<br><span style="font-size: 0.8em; opacity: 0.7;">or click to browse</span></p>
+        </div>
+        <div class="spinner" id="ocr-spinner"></div>
+        <div class="result" id="ocr-result"></div>
+    </div>
+
+    <!-- Invoice Spreadsheet Card (Original) -->
+    <div class="card">
+        <h2>📊 Invoice Spreadsheet</h2>
+        <div class="drop-zone" id="excel-zone">
+            <input type="file" id="excel-input" accept=".xlsx,.xls,.csv">
+            <span class="icon">📈</span>
+            <p>Drag & drop a messy Excel file<br><span style="font-size: 0.8em; opacity: 0.7;">or click to browse</span></p>
+        </div>
+        <div class="spinner" id="excel-spinner"></div>
+        <div class="result" id="excel-result"></div>
+    </div>
+    
+    <!-- Clients Import Card -->
+    <div class="card">
+        <h2>👥 Clients Import</h2>
+        <div class="drop-zone" id="clients-zone">
+            <input type="file" id="clients-input" accept=".xlsx,.xls,.csv">
+            <span class="icon">👥</span>
+            <p>Drag & drop Clients Excel<br><span style="font-size: 0.8em; opacity: 0.7;">Maps & Imports directly to DB</span></p>
+        </div>
+        <div class="spinner" id="clients-spinner"></div>
+        <div class="result" id="clients-result"></div>
+    </div>
+    
+    <!-- Suppliers Import Card -->
+    <div class="card">
+        <h2>🏢 Suppliers Import</h2>
+        <div class="drop-zone" id="suppliers-zone">
+            <input type="file" id="suppliers-input" accept=".xlsx,.xls,.csv">
+            <span class="icon">🏢</span>
+            <p>Drag & drop Suppliers Excel<br><span style="font-size: 0.8em; opacity: 0.7;">Maps & Imports directly to DB</span></p>
+        </div>
+        <div class="spinner" id="suppliers-spinner"></div>
+        <div class="result" id="suppliers-result"></div>
+    </div>
+    
+    <!-- Stock Import Card -->
+    <div class="card">
+        <h2>📦 Stock & Products Import</h2>
+        <div class="drop-zone" id="stock-zone">
+            <input type="file" id="stock-input" accept=".xlsx,.xls,.csv">
+            <span class="icon">📦</span>
+            <p>Drag & drop Stock Excel<br><span style="font-size: 0.8em; opacity: 0.7;">Creates Products & Inventory</span></p>
+        </div>
+        <div class="spinner" id="stock-spinner"></div>
+        <div class="result" id="stock-result"></div>
+    </div>
+</div>
+
+<script>
+const BASE_URL = window.location.protocol === 'file:' ? 'http://127.0.0.1:8000' : window.location.origin;
+const API_COMPANIES = `${BASE_URL}/api/companies/`;
+const API_DOCUMENTS = `${BASE_URL}/api/ai/documents/`;
+const API_SPREADSHEETS_FAST = `${BASE_URL}/api/ai/fast-mapping/`;
+const API_SPREADSHEETS_IMPORT_CORRECT = `${BASE_URL}/api/ai/spreadsheets/`;
+
+let companyId = null;
+
+function getCookie(name) {
+    const match = document.cookie.match('(?:^|; )' + name + '=([^;]*)');
+    return match ? decodeURIComponent(match[1]) : null;
+}
+
+function apiFetch(url, options = {}) {
+    const method = (options.method || 'GET').toUpperCase();
+    const headers = new Headers(options.headers || {});
+    if (!['GET', 'HEAD', 'OPTIONS'].includes(method)) {
+        headers.set('X-CSRFToken', getCookie('csrftoken'));
+    }
+    return fetch(url, { ...options, headers, credentials: 'same-origin' });
+}
+
+async function ensureCompany() {
+    if (companyId) return companyId;
+    const res = await apiFetch(API_COMPANIES);
+    const companies = await res.json();
+    const list = Array.isArray(companies) ? companies : (companies.results || []);
+    if (list.length > 0) {
+        companyId = list[0].id;
+        return companyId;
+    }
+    const created = await apiFetch(API_COMPANIES, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: 'Hub Test Company', email: 'hub@example.com' }),
+    });
+    const company = await created.json();
+    companyId = company.id;
+    return companyId;
+}
+
+function handleDrag(zoneId, inputId) {
+    const zone = document.getElementById(zoneId);
+    const input = document.getElementById(inputId);
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+    zone.addEventListener('dragleave', e => { e.preventDefault(); zone.classList.remove('dragover'); });
+    zone.addEventListener('drop', e => { 
+        e.preventDefault(); 
+        zone.classList.remove('dragover'); 
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            input.files = e.dataTransfer.files;
+            input.dispatchEvent(new Event('change'));
+        }
+    });
+}
+handleDrag('ocr-zone', 'ocr-input');
+handleDrag('excel-zone', 'excel-input');
+handleDrag('clients-zone', 'clients-input');
+handleDrag('suppliers-zone', 'suppliers-input');
+handleDrag('stock-zone', 'stock-input');
+
+async function confirmImport(importId, resultEl) {
+    resultEl.innerHTML = `<div style="color: #60a5fa; margin-top: 15px; text-align: center;">Executing import... please wait.</div>`;
+    try {
+        const res = await apiFetch(`${API_SPREADSHEETS_IMPORT_CORRECT}${importId}/confirm/`, { method: 'POST' });
+        const data = await res.json();
+        if (res.ok) {
+            let msg = `✅ Import Successful! `;
+            if (data.import_result) {
+                msg += `Created ${data.import_result.created_count} records.`;
+            }
+            resultEl.innerHTML = `<div style="color: #34d399; margin-top: 15px; padding: 15px; border: 1px solid #34d399; border-radius: 8px; background: rgba(52, 211, 153, 0.1); text-align: center;">
+                ${msg}
+            </div>`;
+        } else {
+            throw new Error(data.detail || 'Failed to confirm');
+        }
+    } catch (err) {
+        resultEl.innerHTML = `<div style="color: #ef4444; margin-top: 15px; text-align: center;">Error: ${err.message}</div>`;
+    }
+}
+
+async function handleUpload(file, url, resultEl, spinnerEl, expectedType = null) {
+    resultEl.style.display = 'none';
+    spinnerEl.style.display = 'block';
+    resultEl.classList.remove('error');
+    
+    try {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        // Only attach company for document OCR and Spreadsheets Import
+        if (url === API_DOCUMENTS || url === API_SPREADSHEETS_IMPORT_CORRECT) {
+            const cid = await ensureCompany();
+            formData.append('company', cid);
+        }
+        
+        if (expectedType) {
+            formData.append('expected_type', expectedType);
+        }
+        
+        const res = await apiFetch(url, { method: 'POST', body: formData });
+        if (!res.ok) {
+            const errText = await res.text();
+            throw new Error(errText || `HTTP ${res.status}`);
+        }
+        let data = await res.json();
+        
+        // Output formatting
+        if (data.column_mapping) {
+            // Render beautiful table for Spreadsheet
+            let html = '';
+            
+            // Add Analysis Box
+            if (data.analysis) {
+                html += `<div class="analysis-box">
+                    <strong>AI Analysis</strong>
+                    ${data.analysis}
+                </div>`;
+            }
+            
+            html += `<div class="badge">Detected Type: ${data.data_type.toUpperCase()}</div>`;
+            
+            // If it's the real import endpoint, add the Confirm button
+            if (data.id) {
+                html += `<div style="margin-bottom: 15px; text-align: right;">
+                    <button onclick="confirmImport('${data.id}', this.parentElement.parentElement)" style="background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s;">
+                        Confirm & Import to Database
+                    </button>
+                </div>`;
+            }
+            
+            html += `<div class="table-container"><table class="data-table"><thead><tr>`;
+            
+            // Generate Schema Options for the dropdown
+            const schemas = {
+                "stock": ["product_name", "description", "sku", "barcode", "brand", "unit", "purchase_price", "selling_price", "tax_rate", "minimum_stock", "weight", "stock_quantity", "warehouse_location", "category_name", "supplier_name", "status"],
+                "clients": ["customer_code", "company_name", "contact_name", "email", "phone", "mobile", "website", "tax_identifier", "ice", "rc", "address", "city", "postal_code", "country", "credit_limit", "notes"],
+                "suppliers": ["supplier_code", "company_name", "contact_name", "email", "phone", "mobile", "website", "tax_identifier", "ice", "rc", "address", "city", "postal_code", "country", "notes"],
+                "invoices": ["invoice_number", "issue_date", "due_date", "status", "subtotal", "tax_amount", "discount_amount", "total_amount", "balance_due", "notes", "terms", "client", "client_email", "description", "quantity", "unit_price", "payment_method"],
+                "inventory": ["product_name", "variant_name", "quantity", "reserved_quantity", "available_quantity", "reorder_level", "warehouse_location"],
+                "other": ["unmapped"]
+            };
+            const currentSchema = schemas[data.data_type] || schemas["other"];
+            
+            // Build Dropdown HTML
+            const buildDropdown = (selected) => {
+                let opts = `<option value="UNMAPPED">-- UNMAPPED --</option>`;
+                currentSchema.forEach(f => {
+                    opts += `<option value="${f}" ${selected === f ? 'selected' : ''}>${f}</option>`;
+                });
+                return `<select class="mapping-dropdown" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 4px; border-radius: 4px; margin-top: 5px;">${opts}</select>`;
+            };
+
+            // Render Headers
+            data.column_mapping.forEach(col => {
+                let statusHtml = '';
+                let mapUi = '';
+                
+                if (col.mapped_column === 'UNMAPPED') {
+                    statusHtml = `<span style="color: #64748b; font-size: 0.8rem;" title="${col.reasoning}">⏸️ Ignored (Not in Schema)</span>`;
+                    mapUi = buildDropdown('UNMAPPED');
+                } else if (col.confidence_score < 0.70) {
+                    statusHtml = `<span style="color: #ef4444; font-size: 0.8rem;" title="${col.reasoning}">❌ Low Confidence</span>`;
+                    mapUi = buildDropdown(col.mapped_column);
+                } else if (col.confidence_score < 0.90) {
+                    statusHtml = `<span style="color: #fbbf24; font-size: 0.8rem; cursor: help;" title="${col.reasoning}">⚠️ Please Review</span>`;
+                    mapUi = buildDropdown(col.mapped_column);
+                } else {
+                    statusHtml = `<span style="color: #34d399; font-size: 0.8rem; cursor: help;" title="${col.reasoning}">✓ Auto-mapped</span>`;
+                    mapUi = `<span class="mapping-field" style="display: block; margin-top: 5px;">↳ ${col.mapped_column}</span>`;
+                }
+
+                html += `<th>
+                    <span class="mapping-original">${col.source_header}</span>
+                    ${statusHtml}
+                    ${mapUi}
+                </th>`;
+            });
+            html += `</tr></thead><tbody>`;
+            
+            // Render Sample Rows
+            if (data.sample_rows && data.sample_rows.length > 0) {
+                data.sample_rows.forEach(row => {
+                    html += `<tr>`;
+                    data.column_mapping.forEach(col => {
+                        const val = row[col.source_header];
+                        html += `<td>${val !== null && val !== undefined ? val : '-'}</td>`;
+                    });
+                    html += `</tr>`;
+                });
+            } else {
+                html += `<tr><td colspan="${data.column_mapping.length}">No data rows found</td></tr>`;
+            }
+            html += `</tbody></table></div>`;
+            
+            resultEl.innerHTML = html;
+        } else {
+            // Render JSON for OCR or Errors
+            resultEl.textContent = JSON.stringify(data, null, 2);
+        }
+    } catch (err) {
+        resultEl.textContent = 'Error: ' + err.message;
+        resultEl.classList.add('error');
+    } finally {
+        spinnerEl.style.display = 'none';
+        resultEl.style.display = 'block';
+    }
+}
+
+document.getElementById('ocr-input').addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (file) handleUpload(file, API_DOCUMENTS, document.getElementById('ocr-result'), document.getElementById('ocr-spinner'));
+});
+
+document.getElementById('excel-input').addEventListener('change', e => {
+    const file = e.target.files[0];
+    // Keep Invoice Excel using the fast-mapping API without DB import
+    if (file) handleUpload(file, API_SPREADSHEETS_FAST, document.getElementById('excel-result'), document.getElementById('excel-spinner'));
+});
+
+document.getElementById('clients-input').addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (file) handleUpload(file, API_SPREADSHEETS_IMPORT_CORRECT, document.getElementById('clients-result'), document.getElementById('clients-spinner'), 'clients');
+});
+
+document.getElementById('suppliers-input').addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (file) handleUpload(file, API_SPREADSHEETS_IMPORT_CORRECT, document.getElementById('suppliers-result'), document.getElementById('suppliers-spinner'), 'suppliers');
+});
+
+document.getElementById('stock-input').addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (file) handleUpload(file, API_SPREADSHEETS_IMPORT_CORRECT, document.getElementById('stock-result'), document.getElementById('stock-spinner'), 'stock');
+});
+</script>
+</body>
+</html>

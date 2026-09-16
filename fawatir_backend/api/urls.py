@@ -1,0 +1,86 @@
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from . import views
+
+router = DefaultRouter()
+router.register(r'companies', views.OrganizationViewSet, basename='company')
+router.register(r'organizations', views.OrganizationViewSet)
+router.register(r'roles', views.RoleViewSet)
+router.register(r'users', views.UserViewSet)
+router.register(r'permissions', views.PermissionViewSet)
+router.register(r'role-permissions', views.RolePermissionViewSet)
+router.register(r'company-settings', views.OrganizationSettingViewSet, basename='company-setting')
+router.register(r'organization-settings', views.OrganizationSettingViewSet)
+router.register(r'audit-logs', views.AuditLogViewSet)
+router.register(r'user-preferences', views.UserPreferenceViewSet)
+router.register(r'user-sessions', views.UserSessionViewSet)
+router.register(r'password-resets', views.PasswordResetViewSet)
+router.register(r'email-verifications', views.EmailVerificationViewSet)
+router.register(r'activity-logs', views.ActivityLogViewSet)
+router.register(r'notifications', views.NotificationViewSet)
+router.register(r'pdf-templates', views.PdfTemplateViewSet)
+# 2. CRM Module (11 total)
+
+router.register(r'suppliers', views.SupplierViewSet)
+router.register(r'marketing-campaigns', views.MarketingCampaignViewSet)
+router.register(r'clients', views.ClientViewSet)
+router.register(r'client-contacts', views.ClientContactViewSet)
+router.register(r'customer-addresses', views.CustomerAddressViewSet)
+router.register(r'customer-portals', views.CustomerPortalViewSet)
+router.register(r'supplier-contacts', views.SupplierContactViewSet)
+router.register(r'supplier-addresses', views.SupplierAddressViewSet)
+router.register(r'whatsapp-messages', views.WhatsappMessageViewSet)
+router.register(r'marketing-ads', views.MarketingAdViewSet)
+router.register(r'marketing-metrics', views.MarketingMetricViewSet)
+
+# 3. Inventory Module (6 total)
+router.register(r'categories', views.CategoryViewSet)
+router.register(r'products', views.ProductViewSet)
+router.register(r'product-variants', views.ProductVariantViewSet)
+router.register(r'inventory', views.InventoryViewSet)
+router.register(r'stock-movements', views.StockMovementViewSet)
+router.register(r'supplier-products', views.SupplierProductViewSet)
+# 4. Accounting Module (7 total)
+router.register(r'invoices', views.InvoiceViewSet)
+router.register(r'invoice-items', views.InvoiceItemViewSet)
+router.register(r'payments', views.PaymentViewSet)
+router.register(r'bank-accounts', views.BankAccountViewSet)
+router.register(r'recurring-invoices', views.RecurringInvoiceViewSet)
+router.register(r'bank-transactions', views.BankTransactionViewSet)
+router.register(r'bank-reconciliations', views.BankReconciliationViewSet)
+
+# 5. Quotations Module (2 total)
+router.register(r'quotations', views.QuotationViewSet)
+router.register(r'quotation-items', views.QuotationItemViewSet)
+
+# 6. Purchase Orders Module (2 total)
+router.register(r'purchase-orders', views.PurchaseOrderViewSet)
+router.register(r'purchase-order-items', views.PurchaseOrderItemViewSet)
+# 7. POS Module (3 total)
+router.register(r'pos-sessions', views.PosSessionViewSet)
+router.register(r'pos-sales', views.PosSaleViewSet)
+router.register(r'pos-sale-items', views.PosSaleItemViewSet)
+
+# 8. Human Resources Module (4 total)
+router.register(r'departments', views.DepartmentViewSet)
+router.register(r'employees', views.EmployeeViewSet)
+router.register(r'payrolls', views.PayrollViewSet)
+router.register(r'payroll-items', views.PayrollItemViewSet)
+
+# 9. AI Module (8 total)
+router.register(r'ai-conversations', views.AiConversationViewSet)
+router.register(r'ocr-documents', views.OcrDocumentViewSet)
+router.register(r'ai-messages', views.AiMessageViewSet)
+router.register(r'ai-tasks', views.AiTaskViewSet)
+router.register(r'ai-recommendations', views.AiRecommendationViewSet)
+router.register(r'ai-automations', views.AiAutomationViewSet)
+router.register(r'ai-notifications', views.AiNotificationViewSet)
+router.register(r'ai-ad-generations', views.AiAdGenerationViewSet)
+
+# 10. Support Module (1 total)
+router.register(r'tickets', views.TicketViewSet)
+
+urlpatterns = [
+    path('', include(router.urls)),
+    path('settings/', views.GlobalSettingsView.as_view(), name='global_settings'),
+]

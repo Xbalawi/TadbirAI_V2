@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tadbir AI — Scanner de test (local, gratuit)</title>
+<style>
+  :root {
+    --bg: #f4f1ea;
+    --card: #ffffff;
+    --ink: #1f2430;
+    --muted: #6b7280;
+    --accent: #b5651d;
+    --ok: #1a7f37;
+    --warn: #b45309;
+    --border: #e4ddd0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 16px;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    max-width: 720px;
+    margin-inline: auto;
+  }
+  h1 { font-size: 1.3rem; margin-bottom: 4px; }
+  p.subtitle { color: var(--muted); margin-top: 0; font-size: 0.9rem; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .card h2 { font-size: 1rem; margin: 0 0 10px; }
+  input[type="file"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+  }
+  #preview {
+    max-width: 100%;
+    max-height: 260px;
+    display: none;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  #status {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  #status.error { color: #b91c1c; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  th, td {
+    text-align: left;
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  th { color: var(--muted); font-weight: 600; width: 40%; }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  .badge.ok { background: #e6f4ea; color: var(--ok); }
+  .badge.warn { background: #fef3e2; color: var(--warn); }
+  #history-table { overflow-x: auto; }
+  #history-table table { min-width: 560px; }
+  .lignes-list { margin: 0; padding-left: 16px; }
+</style>
+</head>
+<body>
+
+<h1>Scanner de documents — test local</h1>
+<p class="subtitle">Pipeline 100% gratuit : Tesseract (OCR) + Ollama (analyse). Prenez une photo ou choisissez un fichier.</p>
+
+<div class="card">
+  <h2>1. Nouveau document</h2>
+  <input type="file" id="fileInput" accept="image/*" capture="environment">
+  <img id="preview" alt="Aperçu">
+  <div id="status"></div>
+</div>
+
+<div class="card" id="result-card" style="display:none;">
+  <h2>2. Résultat</h2>
+  <table id="result-table"></table>
+</div>
+
+<div class="card">
+  <h2>3. Historique (partagé entre téléphone et PC)</h2>
+  <div id="history-table">Chargement…</div>
+</div>
+
+<script>
+const API_COMPANIES = '/api/companies/';
+const API_DOCUMENTS = '/api/ai/documents/';
+
+let companyId = null;
+
+function getCookie(name) {
+  const match = document.cookie.match('(?:^|; )' + name + '=([^;]*)');
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
+// DRF only skips CSRF checks for anonymous requests — anyone also logged into /admin/ in the
+// same browser has an authenticated session, so POST/PATCH here need the CSRF token too.
+function apiFetch(url, options = {}) {
+  const method = (options.method || 'GET').toUpperCase();
+  const headers = new Headers(options.headers || {});
+  if (!['GET', 'HEAD', 'OPTIONS'].includes(method)) {
+    headers.set('X-CSRFToken', getCookie('csrftoken'));
+  }
+  return fetch(url, { ...options, headers, credentials: 'same-origin' });
+}
+
+async function ensureCompany() {
+  const res = await apiFetch(API_COMPANIES);
+  const companies = await res.json();
+  const list = Array.isArray(companies) ? companies : (companies.results || []);
+  if (list.length > 0) {
+    return list[0].id;
+  }
+  const created = await apiFetch(API_COMPANIES, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: 'Test Company', email: 'test@example.com' }),
+  });
+  const company = await created.json();
+  return company.id;
+}
+
+function setStatus(text, isError) {
+  const el = document.getElementById('status');
+  el.textContent = text;
+  el.className = isError ? 'error' : '';
+}
+
+function fieldRow(label, value) {
+  return `<tr><th>${label}</th><td>${value === null || value === undefined || value === '' ? '—' : value}</td></tr>`;
+}
+
+function renderLignes(lignes) {
+  if (!lignes || !lignes.length) return '—';
+  const items = lignes.map(l => {
+    const desc = l.description || '—';
+    const qty = l.quantite ?? '—';
+    const price = l.prix_unitaire ?? '—';
+    const total = l.montant ?? '—';
+    return `<li>${desc} — qté ${qty} × ${price} = ${total}</li>`;
+  }).join('');
+  return `<ul class="lignes-list">${items}</ul>`;
+}
+
+function docTypeLabel(t) {
+  return { invoice: 'Facture', shipping: 'Bon de livraison', receipt: 'Ticket de caisse', other: 'Autre' }[t] || t || '—';
+}
+
+function langueLabel(l) {
+  return { fr: 'Français', en: 'Anglais', ar: 'Arabe', autre: 'Autre' }[l] || l || '—';
+}
+
+function renderResult(doc) {
+  const card = document.getElementById('result-card');
+  const table = document.getElementById('result-table');
+  card.style.display = 'block';
+
+  if (doc.status === 'failed') {
+    table.innerHTML = fieldRow('Erreur', doc.error_message || 'Échec du traitement');
+    return;
+  }
+
+  // doc_type/langue/fournisseur/date/numero/montant_ttc are now real columns on Document
+  // (promoted from extracted_data server-side); montant_ht/montant_tva/lignes are type-specific
+  // and stay in extracted_data only.
+  const data = doc.extracted_data || {};
+  const badge = doc.needs_review
+    ? '<span class="badge warn">À vérifier</span>'
+    : '<span class="badge ok">OK</span>';
+
+  table.innerHTML = [
+    fieldRow('Statut', badge),
+    fieldRow('Type de document', docTypeLabel(doc.doc_type)),
+    fieldRow('Langue détectée', langueLabel(doc.langue)),
+    fieldRow('Fournisseur', doc.fournisseur),
+    fieldRow('Date', doc.date),
+    fieldRow('Numéro', doc.numero),
+    fieldRow('Montant HT', data.montant_ht),
+    fieldRow('Montant TVA', data.montant_tva),
+    fieldRow('Montant TTC', doc.montant_ttc),
+    fieldRow('Lignes', renderLignes(data.lignes)),
+  ].join('');
+}
+
+async function loadHistory() {
+  const container = document.getElementById('history-table');
+  try {
+    const res = await apiFetch(API_DOCUMENTS);
+    const docs = await res.json();
+    const list = Array.isArray(docs) ? docs : (docs.results || []);
+    if (list.length === 0) {
+      container.innerHTML = '<p>Aucun document pour le moment.</p>';
+      return;
+    }
+    const rows = list.slice().reverse().map(doc => {
+      const badge = doc.status === 'failed'
+        ? '<span class="badge warn">Échec</span>'
+        : (doc.needs_review ? '<span class="badge warn">À vérifier</span>' : '<span class="badge ok">OK</span>');
+      return `<tr>
+        <td>${new Date(doc.created_at).toLocaleString()}</td>
+        <td>${docTypeLabel(doc.doc_type)}</td>
+        <td>${doc.fournisseur || '—'}</td>
+        <td>${doc.montant_ttc ?? '—'}</td>
+        <td>${badge}</td>
+      </tr>`;
+    }).join('');
+    container.innerHTML = `<table>
+      <thead><tr><th>Date</th><th>Type</th><th>Fournisseur</th><th>TTC</th><th>Statut</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+  } catch (err) {
+    container.innerHTML = '<p>Impossible de charger l\'historique.</p>';
+  }
+}
+
+async function pollDocument(id) {
+  // perform_create runs synchronously server-side, so the POST response already
+  // has the final status — this just re-fetches in case of a slow local model.
+  const res = await apiFetch(`${API_DOCUMENTS}${id}/`);
+  return res.json();
+}
+
+document.getElementById('fileInput').addEventListener('change', async (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const preview = document.getElementById('preview');
+  preview.src = URL.createObjectURL(file);
+  preview.style.display = 'block';
+  document.getElementById('result-card').style.display = 'none';
+
+  setStatus('Traitement en cours (OCR + analyse locale, jusqu\'à ~30s)…', false);
+
+  try {
+    if (!companyId) companyId = await ensureCompany();
+
+    const formData = new FormData();
+    formData.append('company', companyId);
+    formData.append('file', file);
+
+    const res = await apiFetch(API_DOCUMENTS, { method: 'POST', body: formData });
+    if (!res.ok) {
+      const errText = await res.text();
+      throw new Error(errText || `HTTP ${res.status}`);
+    }
+    const doc = await res.json();
+
+    if (doc.status === 'pending') {
+      // Rare race: re-fetch once processing settles.
+      await new Promise(r => setTimeout(r, 1500));
+      renderResult(await pollDocument(doc.id));
+    } else {
+      renderResult(doc);
+    }
+
+    setStatus('Terminé.', false);
+    loadHistory();
+  } catch (err) {
+    setStatus('Erreur : ' + err.message, true);
+  }
+});
+
+loadHistory();
+</script>
+
+</body>
+</html>
