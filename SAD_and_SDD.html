@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAD & SDD - Tadbir AI</title>
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        h1, h2, h3, h4 {
+            color: #24292e;
+            border-bottom: 1px solid #eaecef;
+            padding-bottom: 0.3em;
+            margin-top: 24px;
+            margin-bottom: 16px;
+        }
+        h3 { border-bottom: none; }
+        h4 { border-bottom: none; font-size: 1.1em; color: #555; }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+        }
+        th, td {
+            border: 1px solid #dfe2e5;
+            padding: 8px 13px;
+            text-align: left;
+        }
+        th {
+            background-color: #f6f8fa;
+        }
+        code {
+            background-color: rgba(27,31,35,0.05);
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 85%;
+        }
+        pre {
+            background-color: #f6f8fa;
+            padding: 16px;
+            overflow: auto;
+            border-radius: 3px;
+        }
+        pre.mermaid {
+            background-color: transparent;
+            border: none;
+            text-align: center;
+        }
+        .page-break {
+            page-break-after: always;
+        }
+        @media print {
+            body { padding: 0; max-width: 100%; }
+            pre.mermaid { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Software Architecture &amp; Detailed Design Document (SAD &amp; SDD)</h1>
+<p><strong>Project:</strong> Tadbir AI (Intelligent ERP, CRM, &amp; Invoicing System)<br />
+<strong>Version:</strong> 2.0.0<br />
+<strong>Date:</strong> August 2026  </p>
+<hr />
+<h2>1. Executive Summary</h2>
+<p>Tadbir AI is a highly advanced, enterprise-grade Resource Planning (ERP) platform designed specifically for modern Moroccan businesses. It combines core business management modules—including Accounting, Inventory, Human Resources, Point of Sale, and CRM—with cutting-edge Artificial Intelligence capabilities. Features such as Automated OCR Document Parsing, AI-Driven Chatbots, and WhatsApp Integration automate data entry and provide businesses with strategic, actionable insights.</p>
+<hr />
+<h2>2. Software Architecture Design (SAD)</h2>
+<h3>2.1 Architectural Patterns</h3>
+<p>The system operates on a <strong>Decoupled Client-Server Architecture</strong> utilizing RESTful API communication, ensuring scalability and maintainability.</p>
+<ul>
+<li><strong>Frontend Subsystem:</strong> A Server-Side Rendered (SSR) Component-Based Architecture powered by <strong>Next.js 14</strong> (React). It utilizes the Next.js App Router paradigm.</li>
+<li><strong>Backend Subsystem:</strong> Follows the Model-Template-View (MTV) architectural pattern inherent to <strong>Django</strong>, exposing a secure REST API via the <strong>Django REST Framework (DRF)</strong>.</li>
+<li><strong>AI/ML Layer:</strong> Operates as a specialized subsystem within the backend to handle asynchronous, computationally heavy tasks (OCR processing, LLM prompting).</li>
+<li><strong>Database Layer:</strong> A relational database management system using <strong>SQLite</strong> (development) / <strong>PostgreSQL</strong> (production) managed via the Django ORM.</li>
+</ul>
+<h3>2.2 High-Level Architecture Diagram</h3>
+<pre class="mermaid">graph TD
+    User((User / Client)) -->|HTTPS| NextJS[Frontend: Next.js 14]
+
+    subgraph "Railway Production Environment"
+        NextJS -->|REST API Requests| Django[Backend: Django REST Framework]
+
+        Django -->|SQL Queries| DB[(PostgreSQL Database)]
+
+        subgraph "AI Subsystem"
+            Django -->|Image/PDF| OCR[OCR Engine - Pillow/PyTesseract]
+            Django -->|Prompts| LLM[Google Gemini API / Ollama]
+            Django -->|Time-Series Data| Prophet[Facebook Prophet Forecaster]
+        end
+    end
+
+    User -->|WhatsApp Message| Twilio[WhatsApp API Integration]
+    NextJS -->|Client-Side AI| LLM
+    Django -->|Send Message| Twilio
+
+    classDef frontend fill:#1E293B,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef backend fill:#064E3B,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef db fill:#1E3A8A,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef ai fill:#4F46E5,stroke:#fff,stroke-width:2px,color:#fff;
+
+    class NextJS frontend;
+    class Django backend;
+    class DB db;
+    class OCR,LLM,Prophet ai;</pre>
+
+<h3>2.3 Containerization &amp; Deployment Architecture</h3>
+<p>The system is deployed on <strong>Railway</strong>, utilizing a Monorepo deployment strategy optimized for cloud execution:
+- <strong>Frontend Build (Nixpacks):</strong> The Next.js application is located at the root of the repository. Railway's Nixpacks automatically detects the <code>package.json</code>, installs dependencies using <code>npm</code>, and builds the standalone Next.js server. This avoids Docker Out-Of-Memory (OOM) issues and results in a highly optimized deployment.
+- <strong>Backend Build (Docker):</strong> The backend is containerized using <code>fawatir_backend/Dockerfile</code>. It provisions a Python 3.12 Alpine environment, installs system-level dependencies for data science tools, and serves the Django application via Gunicorn.
+- <strong>CI/CD Pipeline:</strong> GitHub Actions automatically tests the backend (<code>python manage.py test</code>) and validates the frontend build on every push.</p>
+<div class="page-break"></div>
+
+<hr />
+<h2>3. Software Detailed Design (SDD)</h2>
+<h3>3.1 Frontend Subsystem (Presentation Layer)</h3>
+<p>The frontend is engineered for extreme performance and UX excellence.</p>
+<ul>
+<li><strong>UI Architecture:</strong> Built using functional React components styled with <strong>TailwindCSS</strong>. The UI adheres to a modern "Bento Grid" spatial design language, ensuring responsiveness across desktop and mobile.</li>
+<li><strong>State Management:</strong> <strong>Zustand</strong> is used for lightweight, globally accessible state stores. This removes the boilerplate of Redux while providing powerful hooks.</li>
+<li><strong>Data Fetching:</strong> Hybrid approach utilizing Next.js Server Components for initial data load (SEO optimization) and Client Components for dynamic interactivity (e.g., modifying invoices).</li>
+<li><strong>AI Rendering:</strong> Integrates <code>react-markdown</code> and <code>remark-gfm</code> to elegantly render rich markdown responses generated by the AI chatbot.</li>
+</ul>
+<h3>3.2 Backend API Modules (Application Layer)</h3>
+<p>The Django backend defines distinct, robust modules managed by <code>rest_framework.routers.DefaultRouter</code>. These endpoints map directly to underlying relational models.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Module</th>
+<th style="text-align: left;">Core Endpoints &amp; Responsibilities</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>CRM</strong></td>
+<td style="text-align: left;"><code>/api/clients/</code>, <code>/api/suppliers/</code><br>Manages customer relationships. Includes custom actions like <code>/clear/</code> to flush mock data.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Inventory</strong></td>
+<td style="text-align: left;"><code>/api/products/</code><br>Tracks inventory levels, categories, and SKU generation.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Accounting</strong></td>
+<td style="text-align: left;"><code>/api/invoices/</code>, <code>/api/quotations/</code><br>Core financial ledger. Supports custom actions like <code>/send_whatsapp/</code> for instant client communication and <code>/send_email/</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>HR &amp; Payroll</strong></td>
+<td style="text-align: left;"><code>/api/employees/</code>, <code>/api/bulletins/</code><br>Staff management, attendance, and payslip generation.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Point of Sale</strong></td>
+<td style="text-align: left;"><code>/api/pos-sessions/</code><br>In-store transaction handling.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>AI Hub</strong></td>
+<td style="text-align: left;"><code>/api/ai-conversations/</code><br>Manages asynchronous AI tasks and prompt history.</td>
+</tr>
+</tbody>
+</table>
+<h3>3.3 Detailed Database Entity-Relationship Models</h3>
+<p>The following diagrams detail the exact database schema derived directly from the Django models.</p>
+<h4>FOUNDATION MODULE</h4>
+<pre class="mermaid">erDiagram
+    Company {
+        UUID id PK
+        string name
+        string legal_name
+        string email
+        string phone
+        string website
+        string address
+        string city
+        string postal_code
+        string country
+        string tax_identifier
+        string ice
+        string rc
+        string industry
+        int company_size
+        string subscription_plan
+        string subscription_status
+        string currency
+        string language
+        string timezone
+        string logo_url
+        boolean is_active
+        datetime created_at
+        datetime updated_at
+    }
+    Role {
+        UUID id PK
+        UUID company_id FK
+        string display_name
+        string system_name
+        string description
+        datetime created_at
+        datetime updated_at
+    }
+    Permission {
+        UUID id PK
+        string module
+        string name
+        string code
+        string description
+    }
+    User {
+        UUID id PK
+        UUID company_id FK
+        UUID role_id FK
+        string first_name
+        string last_name
+        string email
+        string phone
+        string password_hash
+        string avatar_url
+        string job_title
+        datetime birth_date
+        string preferred_language
+        boolean email_verified
+        boolean two_factor_enabled
+        int failed_login_attempts
+        boolean is_active
+        UUID created_by_id FK
+        datetime last_login
+        datetime created_at
+        datetime updated_at
+    }
+    RolePermission {
+        UUID id PK
+        UUID role_id FK
+        UUID permission_id FK
+        UUID assigned_by_id FK
+        datetime assigned_at
+    }
+    CompanySetting {
+        UUID id PK
+        UUID company_id FK
+        float vat_rate
+        float default_tax
+        int invoice_due_days
+        boolean show_vat
+        boolean amount_in_words
+        string invoice_prefix
+        string quotation_prefix
+        string purchase_prefix
+        string iban
+        string rib
+        string swift
+        string footer_text
+        string accent_color
+        string default_language
+        string default_currency
+        string date_format
+        string time_format
+        string country
+        string number_separator
+        boolean include_year
+        int number_length
+        string invoice_template
+        UUID updated_by_id FK
+        datetime created_at
+        datetime updated_at
+    }
+    AuditLog {
+        UUID id PK
+        UUID company_id FK
+        UUID user_id FK
+        string module
+        string action
+        string entity
+        UUID entity_id
+        string description
+        json old_values
+        json new_values
+        string ip_address
+        datetime created_at
+    }
+    UserPreference {
+        UUID id PK
+        UUID user_id FK
+        string theme
+        string language
+        string dashboard_layout
+        boolean notifications_enabled
+        datetime created_at
+        datetime updated_at
+    }
+    UserSession {
+        UUID id PK
+        UUID user_id FK
+        string token
+        string device_name
+        string ip_address
+        string user_agent
+        boolean is_revoked
+        datetime expires_at
+        datetime logged_out_at
+        datetime created_at
+    }
+    PasswordReset {
+        UUID id PK
+        UUID user_id FK
+        string token
+        boolean used
+        datetime expires_at
+        datetime created_at
+    }
+    EmailVerification {
+        UUID id PK
+        UUID user_id FK
+        string verification_token
+        boolean verified
+        datetime verified_at
+        datetime expires_at
+        datetime created_at
+    }
+    ActivityLog {
+        UUID id PK
+        UUID company_id FK
+        UUID user_id FK
+        string module
+        string action
+        string entity
+        UUID entity_id
+        string description
+        string ip_address
+        string user_agent
+        datetime created_at
+    }
+    Notification {
+        UUID id PK
+        UUID company_id FK
+        UUID user_id FK
+        string title
+        string message
+        string notification_type
+        boolean is_read
+        datetime read_at
+        datetime created_at
+    }
+    PdfTemplate {
+        UUID id PK
+        UUID company_id FK
+        string name
+        string document_type
+        string template_path
+        boolean is_default
+        UUID created_by_id FK
+        datetime created_at
+        datetime updated_at
+    }
+
+    User ||--o{ User : has
+    User ||--o{ EmailVerification : has
+    User ||--o{ PasswordReset : has
+    Company ||--o{ ActivityLog : has
+    Company ||--o{ AuditLog : has
+    User ||--o{ UserPreference : has
+    User ||--o{ AuditLog : has
+    User ||--o{ ActivityLog : has
+    Company ||--o{ Notification : has
+    User ||--o{ CompanySetting : has
+    Role ||--o{ RolePermission : has
+    Role ||--o{ User : has
+    User ||--o{ PdfTemplate : has
+    Permission ||--o{ RolePermission : has
+    User ||--o{ RolePermission : has
+    User ||--o{ Notification : has
+    User ||--o{ UserSession : has
+    Company ||--o{ Role : has
+    Company ||--o{ CompanySetting : has
+    Company ||--o{ User : has
+    Company ||--o{ PdfTemplate : has</pre>
+
+<h4>CRM MODULE</h4>
+<pre class="mermaid">erDiagram
+    Client {
+        UUID id PK
+        UUID company_id FK
+        string customer_code
+        string company_name
+        string contact_name
+        string email
+        string phone
+        string mobile
+        string website
+        string tax_identifier
+        string ice
+        string rc
+        string address
+        string city
+        string postal_code
+        string country
+        string notes
+        string status
+        float credit_limit
+        float balance
+        UUID created_by_id FK
+        datetime created_at
+        datetime updated_at
+    }
+    ClientContact {
+        UUID id PK
+        UUID client_id FK
+        string first_name
+        string last_name
+        string job_title
+        string email
+        string phone
+        string mobile
+        boolean is_primary
+        datetime created_at
+    }
+    CustomerAddress {
+        UUID id PK
+        UUID client_id FK
+        string address_type
+        string address
+        string city
+        string postal_code
+        string country
+        datetime created_at
+    }
+    CustomerPortal {
+        UUID id PK
+        UUID client_id FK
+        string email
+        string password_hash
+        boolean is_active
+        datetime last_login
+        datetime created_at
+    }
+    Supplier {
+        UUID id PK
+        UUID company_id FK
+        string supplier_code
+        string company_name
+        string contact_name
+        string email
+        string phone
+        string mobile
+        string website
+        string tax_identifier
+        string ice
+        string rc
+        string address
+        string city
+        string postal_code
+        string country
+        string notes
+        string status
+        UUID created_by_id FK
+        datetime created_at
+        datetime updated_at
+    }
+    SupplierContact {
+        UUID id PK
+        UUID supplier_id FK
+        string first_name
+        string last_name
+        string job_title
+        string email
+        string phone
+        string mobile
+        boolean is_primary
+        datetime created_at
+    }
+    SupplierAddress {
+        UUID id PK
+        UUID supplier_id FK
+        string address_type
+        string address
+        string city
+        string postal_code
+        string country
+        datetime created_at
+    }
+    WhatsappMessage {
+        UUID id PK
+        UUID company_id FK
+        UUID client_id FK
+        UUID invoice_id FK
+        UUID quotation_id FK
+        string phone_number
+        string message
+        string status
+        datetime sent_at
+    }
+    MarketingCampaign {
+        UUID id PK
+        UUID company_id FK
+        UUID created_by_id FK
+        string campaign_name
+        string objective
+        string platform
+        string status
+        float budget
+        datetime start_date
+        datetime end_date
+        string target_audience
+        datetime created_at
+        datetime updated_at
+    }
+    MarketingAd {
+        UUID id PK
+        UUID campaign_id FK
+        boolean generated_by_ai
+        string title
+        string description
+        string media_url
+        string call_to_action
+        string destination_url
+        string status
+        datetime created_at
+        datetime updated_at
+    }
+    MarketingMetric {
+        UUID id PK
+        UUID ad_id FK
+        int impressions
+        int clicks
+        int conversions
+        int reach
+        float cost
+        float revenue_generated
+        float roi
+        datetime updated_at
+    }
+
+    Company ||--o{ Supplier : has
+    Supplier ||--o{ SupplierContact : has
+    Company ||--o{ WhatsappMessage : has
+    Company ||--o{ Client : has
+    Client ||--o{ CustomerAddress : has
+    User ||--o{ Supplier : has
+    Company ||--o{ MarketingCampaign : has
+    MarketingCampaign ||--o{ MarketingAd : has
+    User ||--o{ MarketingCampaign : has
+    Supplier ||--o{ SupplierAddress : has
+    Client ||--o{ CustomerPortal : has
+    Client ||--o{ WhatsappMessage : has
+    MarketingAd ||--o{ MarketingMetric : has
+    Client ||--o{ ClientContact : has
+    Invoice ||--o{ WhatsappMessage : has
+    Quotation ||--o{ WhatsappMessage : has
+    User ||--o{ Client : has</pre>
+
+<h4>INVENTORY MODULE</h4>
+<pre class="mermaid">erDiagram
+    Category {
+        UUID id PK
+        UUID company_id FK
+        UUID parent_category_id FK
+        string name
+        string description
+        string image_url
+        boolean is_active
+        UUID created_by_id FK
+        datetime created_at
+        datetime updated_at
+    }
+    Product {
+        UUID id PK
+        UUID company_id FK
+        UUID category_id FK
+        string sku
+        string barcode
+        string name
+        string description
+        string brand
+        string unit
+        float purchase_price
+        float selling_price
+        float tax_rate
+        int minimum_stock
+        float weight
+        string image_url
+        boolean is_active
+        boolean track_inventory
+        UUID created_by_id FK
+        datetime created_at
+        datetime updated_at
+    }
+    ProductVariant {
+        UUID id PK
+        UUID product_id FK
+        string sku
+        string barcode
+        string variant_name
+        string attribute_name
+        string attribute_value
+        float purchase_price
+        float selling_price
+        datetime created_at
+        datetime updated_at
+    }
+    Inventory {
+        UUID id PK
+        UUID product_id FK
+        UUID variant_id FK
+        int quantity
+        int reserved_quantity
+        int available_quantity
+        int reorder_level
+        string warehouse_location
+        datetime updated_at
+    }
+    StockMovement {
+        UUID id PK
+        UUID product_id FK
+        UUID variant_id FK
+        string movement_type
+        int quantity
+        int previous_quantity
+        int new_quantity
+        string reference_type
+        UUID reference_id
+        string reason
+        UUID created_by_id FK
+        datetime created_at
+    }
+    SupplierProduct {
+        UUID id PK
+        UUID supplier_id FK
+        UUID product_id FK
+        string supplier_reference
+        float purchase_price
+        boolean preferred_supplier
+        int lead_time_days
+        string notes
+        datetime created_at
+    }
+
+    Category ||--o{ Product : has
+    Product ||--o{ ProductVariant : has
+    Product ||--o{ SupplierProduct : has
+    Company ||--o{ Category : has
+    Category ||--o{ Category : has
+    Supplier ||--o{ SupplierProduct : has
+    User ||--o{ Product : has
+    Company ||--o{ Product : has
+    Product ||--o{ Inventory : has
+    User ||--o{ Category : has
+    Product ||--o{ StockMovement : has
+    ProductVariant ||--o{ StockMovement : has
+    ProductVariant ||--o{ Inventory : has
+    User ||--o{ StockMovement : has</pre>
+
+<h4>ACCOUNTING MODULE</h4>
+<pre class="mermaid">erDiagram
+    Invoice {
+        UUID id PK
+        UUID company_id FK
+        UUID client_id FK
+        string invoice_number
+        datetime issue_date
+        datetime due_date
+        string status
+        float subtotal
+        float tax_amount
+        float discount_amount
+        float total_amount
+        float balance_due
+        string notes
+        string terms
+        UUID created_by_id FK
+        datetime created_at
+        datetime updated_at
+    }
+    InvoiceItem {
+        UUID id PK
+        UUID invoice_id FK
+        UUID product_id FK
+        string description
+        float quantity
+        float unit_price
+        float discount
+        float tax_rate
+        float tax_amount
+        float line_total
+        datetime created_at
+    }
+    BankAccount {
+        UUID id PK
+        UUID company_id FK
+        string bank_name
+        string account_name
+        string account_number
+        string currency
+        float current_balance
+        boolean is_active
+        datetime created_at
+        datetime updated_at
+    }
+    Payment {
+        UUID id PK
+        UUID invoice_id FK
+        UUID company_id FK
+        UUID bank_account_id FK
+        float amount
+        datetime payment_date
+        string payment_method
+        string reference
+        string notes
+        UUID created_by_id FK
+        datetime created_at
+    }
+    RecurringInvoice {
+        UUID id PK
+        UUID company_id FK
+        UUID client_id FK
+        UUID template_invoice_id FK
+        string frequency
+        datetime start_date
+        datetime end_date
+        datetime next_generation
+        datetime last_generated
+        boolean is_active
+        datetime created_at
+        datetime updated_at
+    }
+    BankTransaction {
+        UUID id PK
+        UUID bank_account_id FK
+        datetime transaction_date
+        string description
+        string reference
+        float amount
+        string transaction_type
+        boolean imported
+        datetime created_at
+    }
+    BankReconciliation {
+        UUID id PK
+        UUID transaction_id FK
+        UUID payment_id FK
+        UUID invoice_id FK
+        string status
+        datetime reconciled_at
+    }
+
+    Company ||--o{ Invoice : has
+    Company ||--o{ BankAccount : has
+    BankAccount ||--o{ BankTransaction : has
+    BankTransaction ||--o{ BankReconciliation : has
+    Invoice ||--o{ InvoiceItem : has
+    Client ||--o{ Invoice : has
+    Invoice ||--o{ RecurringInvoice : has
+    Invoice ||--o{ Payment : has
+    Client ||--o{ RecurringInvoice : has
+    Product ||--o{ InvoiceItem : has
+    User ||--o{ Invoice : has
+    User ||--o{ Payment : has
+    Company ||--o{ Payment : has
+    Invoice ||--o{ BankReconciliation : has
+    BankAccount ||--o{ Payment : has
+    Company ||--o{ RecurringInvoice : has
+    Payment ||--o{ BankReconciliation : has</pre>
+
+<h4>QUOTATIONS MODULE</h4>
+<pre class="mermaid">erDiagram
+    Quotation {
+        UUID id PK
+        UUID company_id FK
+        UUID client_id FK
+        string quotation_number
+        string status
+        float total_amount
+        datetime created_at
+        datetime updated_at
+    }
+    QuotationItem {
+        UUID id PK
+        UUID quotation_id FK
+        UUID product_id FK
+        string description
+        float quantity
+        string unit
+        float unit_price
+        float discount
+        float tax_rate
+        float tax_amount
+        float line_total
+        datetime created_at
+    }
+
+    Client ||--o{ Quotation : has
+    Quotation ||--o{ QuotationItem : has
+    Product ||--o{ QuotationItem : has
+    Company ||--o{ Quotation : has</pre>
+
+<h4>PURCHASE ORDERS MODULE</h4>
+<pre class="mermaid">erDiagram
+    PurchaseOrder {
+        UUID id PK
+        UUID company_id FK
+        UUID supplier_id FK
+        string purchase_order_number
+        string status
+        float total_amount
+        datetime created_at
+        datetime updated_at
+    }
+    PurchaseOrderItem {
+        UUID id PK
+        UUID purchase_order_id FK
+        UUID product_id FK
+        string description
+        float quantity
+        float received_quantity
+        float remaining_quantity
+        string unit
+        float unit_cost
+        float discount
+        float tax_rate
+        float tax_amount
+        float line_total
+        datetime created_at
+    }
+
+    Product ||--o{ PurchaseOrderItem : has
+    PurchaseOrder ||--o{ PurchaseOrderItem : has
+    Company ||--o{ PurchaseOrder : has
+    Supplier ||--o{ PurchaseOrder : has</pre>
+
+<h4>POS MODULE</h4>
+<pre class="mermaid">erDiagram
+    PosSession {
+        UUID id PK
+        UUID company_id FK
+        string session_number
+        string status
+        UUID created_by_id FK
+        datetime created_at
+        datetime updated_at
+    }
+    PosSale {
+        UUID id PK
+        UUID company_id FK
+        UUID session_id FK
+        string sale_number
+        float total_amount
+        UUID created_by_id FK
+        datetime created_at
+    }
+    PosSaleItem {
+        UUID id PK
+        UUID sale_id FK
+        UUID product_id FK
+        float quantity
+        string unit
+        float unit_price
+        float discount
+        float tax_rate
+        float tax_amount
+        float line_total
+        datetime created_at
+    }
+
+    User ||--o{ PosSession : has
+    User ||--o{ PosSale : has
+    PosSession ||--o{ PosSale : has
+    Product ||--o{ PosSaleItem : has
+    PosSale ||--o{ PosSaleItem : has
+    Company ||--o{ PosSession : has
+    Company ||--o{ PosSale : has</pre>
+
+<h4>HUMAN RESOURCES MODULE</h4>
+<pre class="mermaid">erDiagram
+    Department {
+        UUID id PK
+        UUID company_id FK
+        string name
+        datetime created_at
+    }
+    Employee {
+        UUID id PK
+        UUID company_id FK
+        UUID department_id FK
+        string employee_number
+        string first_name
+        string last_name
+        float salary
+        datetime created_at
+        datetime updated_at
+    }
+    Payroll {
+        UUID id PK
+        UUID company_id FK
+        UUID employee_id FK
+        string payroll_number
+        float net_salary
+        datetime created_at
+        datetime updated_at
+    }
+    PayrollItem {
+        UUID id PK
+        UUID payroll_id FK
+        string item_name
+        string item_type
+        float amount
+        string description
+        datetime created_at
+    }
+
+    Employee ||--o{ Payroll : has
+    Payroll ||--o{ PayrollItem : has
+    Company ||--o{ Department : has
+    Department ||--o{ Employee : has
+    Company ||--o{ Payroll : has
+    Company ||--o{ Employee : has</pre>
+
+<h4>AI MODULE</h4>
+<pre class="mermaid">erDiagram
+    AiConversation {
+        UUID id PK
+        UUID company_id FK
+        UUID user_id FK
+        string title
+        datetime created_at
+    }
+    AiMessage {
+        UUID id PK
+        UUID conversation_id FK
+        string sender
+        string message
+        int tokens_used
+        float response_time
+        datetime created_at
+    }
+    OcrDocument {
+        UUID id PK
+        UUID company_id FK
+        UUID uploaded_by_id FK
+        string original_filename
+        string extracted_text
+        string processing_status
+        datetime created_at
+    }
+    AiTask {
+        UUID id PK
+        UUID company_id FK
+        UUID user_id FK
+        string task_type
+        string entity_type
+        UUID entity_id
+        string prompt
+        string ai_response
+        float confidence_score
+        string priority
+        string status
+        datetime created_at
+        datetime completed_at
+    }
+    AiRecommendation {
+        UUID id PK
+        UUID company_id FK
+        string recommendation_type
+        string title
+        string description
+        string entity_type
+        UUID entity_id
+        string priority
+        string status
+        datetime created_at
+    }
+    AiAutomation {
+        UUID id PK
+        UUID company_id FK
+        string name
+        string trigger_event
+        string action_type
+        boolean enabled
+        datetime created_at
+        datetime updated_at
+    }
+    AiNotification {
+        UUID id PK
+        UUID company_id FK
+        UUID user_id FK
+        UUID recommendation_id FK
+        string title
+        string message
+        string notification_type
+        boolean is_read
+        datetime created_at
+    }
+    AiAdGeneration {
+        UUID id PK
+        UUID company_id FK
+        UUID user_id FK
+        UUID campaign_id FK
+        string prompt
+        string generated_title
+        string generated_description
+        string generated_hashtags
+        string generated_keywords
+        string language
+        string ai_provider
+        string model_name
+        datetime created_at
+    }
+    Ticket {
+        UUID id PK
+        UUID company_id FK
+        UUID client_id FK
+        UUID assigned_to_id FK
+        string ticket_number
+        string subject
+        string description
+        string priority
+        string status
+        datetime created_at
+        datetime updated_at
+    }
+
+    AiRecommendation ||--o{ AiNotification : has
+    Company ||--o{ AiAdGeneration : has
+    User ||--o{ Ticket : has
+    User ||--o{ AiConversation : has
+    Company ||--o{ AiRecommendation : has
+    User ||--o{ AiAdGeneration : has
+    Company ||--o{ Ticket : has
+    Company ||--o{ AiConversation : has
+    User ||--o{ AiTask : has
+    Company ||--o{ AiNotification : has
+    Client ||--o{ Ticket : has
+    Company ||--o{ AiAutomation : has
+    Company ||--o{ AiTask : has
+    MarketingCampaign ||--o{ AiAdGeneration : has
+    AiConversation ||--o{ AiMessage : has
+    Company ||--o{ OcrDocument : has
+    User ||--o{ OcrDocument : has
+    User ||--o{ AiNotification : has</pre>
+
+<div class="page-break"></div>
+
+<h3>3.4 Feature Deep-Dive: WhatsApp Integration Workflow</h3>
+<p>The system provides one-click WhatsApp invoice delivery, bypassing manual communication.</p>
+<pre class="mermaid">sequenceDiagram
+    participant User
+    participant NextJS as Frontend
+    participant Django as Backend
+    participant Twilio as WhatsApp API
+    participant Client
+
+    User->>NextJS: Clicks "Send via WhatsApp" on Invoice #102
+    NextJS->>Django: POST /api/invoices/102/send_whatsapp/
+    Django->>Django: Retrieve Invoice & Client Phone Number
+    Django->>Django: Format WhatsApp Message Template
+    Django->>Twilio: HTTP POST API Request (Twilio Credentials)
+    Twilio-->>Django: Success (Message SID)
+    Django-->>NextJS: 200 OK {"status": "success"}
+    NextJS-->>User: Display Green Success Toast
+    Twilio->>Client: WhatsApp Message Received!</pre>
+
+<h3>3.5 Feature Deep-Dive: System Data Clearing (Testing Mode)</h3>
+<p>To allow the user to easily wipe mock data and prepare the system for production, specific administrative endpoints were engineered.</p>
+<pre class="mermaid">sequenceDiagram
+    participant Admin
+    participant NextJS as Frontend
+    participant Django as Backend
+    participant SQLite as Database
+
+    Admin->>NextJS: Clicks "Clear Fake Data" in Settings
+    NextJS->>Django: POST /api/clients/clear/
+    Django->>SQLite: DELETE FROM api_client;
+    SQLite-->>Django: Rows deleted
+    Django-->>NextJS: 200 OK {"status": "cleared"}
+    NextJS->>NextJS: Clear Local Zustand State
+    NextJS-->>Admin: UI Updates to empty lists</pre>
+
+<hr />
+<h2>4. Technology Stack &amp; Dependencies</h2>
+<h3>4.1 Frontend Stack</h3>
+<ul>
+<li><strong>Core:</strong> Next.js 14, React 18</li>
+<li><strong>Styling:</strong> TailwindCSS, <code>clsx</code></li>
+<li><strong>Iconography:</strong> <code>lucide-react</code></li>
+<li><strong>State Management:</strong> <code>zustand</code></li>
+<li><strong>Utilities:</strong> <code>xlsx</code> (Excel generation), <code>date-fns</code> (Date formatting)</li>
+</ul>
+<h3>4.2 Backend Stack</h3>
+<ul>
+<li><strong>Core:</strong> Python 3.12, Django 6.x, Django REST Framework</li>
+<li><strong>Data Science:</strong> <code>pandas</code>, <code>numpy</code>, <code>prophet</code> (Time-series forecasting)</li>
+<li><strong>AI &amp; Integrations:</strong> <code>google-generativeai</code>, <code>twilio</code></li>
+<li><strong>Database:</strong> SQLite3 / PostgreSQL</li>
+</ul>
+<hr />
+<h2>5. Security &amp; System Integrity</h2>
+<ul>
+<li><strong>Environment Injection:</strong> Sensitive cryptographic keys (<code>SECRET_KEY</code>, <code>GEMINI_API_KEY</code>, <code>TWILIO_AUTH_TOKEN</code>) are never hardcoded. They are injected at runtime via Railway Environment Variables.</li>
+<li><strong>Data Validation:</strong> Both incoming requests and AI-generated outputs are rigorously validated using DRF Serializers and Pydantic schemas to prevent injection attacks and ensure database integrity.</li>
+<li><strong>Cross-Origin Resource Sharing (CORS):</strong> Strictly configured via <code>django-cors-headers</code> to ensure that only the trusted Next.js frontend origin can execute mutations on the database.</li>
+</ul>
+</body>
+</html>
