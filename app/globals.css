@@ -1,0 +1,443 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400..700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-fraunces: 'Fraunces', serif;
+  --font-inter: 'Inter', sans-serif;
+  --font-plex-mono: 'IBM Plex Mono', monospace;
+}
+
+@layer utilities {
+  .bg-dot-grid {
+    background-image: radial-gradient(rgba(148, 163, 184, 0.15) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+  .glow-indigo {
+    box-shadow: 0 0 30px -5px rgba(99, 102, 241, 0.3);
+  }
+  .glow-emerald {
+    box-shadow: 0 0 30px -5px rgba(16, 185, 129, 0.3);
+  }
+}
+
+/* ==========================================================================
+   PRINT MEDIA RULES FOR PHYSICAL PAPER RECEIPTS & THERMAL PRINTERS
+   ========================================================================== */
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    visibility: hidden !important;
+  }
+
+  /* Only reveal the printable receipt element */
+  #printable-pos-receipt, #printable-pos-receipt * {
+    visibility: visible !important;
+  }
+
+  #printable-pos-receipt {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 80mm !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 15px !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    box-shadow: none !important;
+    z-index: 999999 !important;
+  }
+}
+
+/* ==========================================================================
+   1. DEFAULT THEME: DARK MODE
+   ========================================================================== */
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #020617; /* Slate 950 */
+  color: #F8FAFC;
+  font-size: 85%; /* Scales down rem units to mimic ~80% zoom density */
+}
+
+body {
+  background-color: #020617;
+  color: #F8FAFC;
+  font-family: inherit;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.figure {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.025em;
+}
+
+/* Bento & Ledger Cards in Dark Mode */
+.ledger-card, .bento-card {
+  position: relative;
+  background-color: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(16px);
+  border-radius: 1rem;
+  border: 1px solid rgba(30, 41, 59, 0.9);
+  padding: 1.5rem;
+  overflow: hidden;
+  color: #F8FAFC;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+.ledger-card:hover, .bento-card:hover {
+  border-color: rgba(51, 65, 85, 0.9);
+}
+
+/* Form Inputs in Dark Mode */
+input, select, textarea {
+  color: #FFFFFF;
+  background-color: #020617;
+  border-color: #1E293B;
+}
+
+select option {
+  background-color: #0F172A;
+  color: #F8FAFC;
+}
+
+input::placeholder, textarea::placeholder {
+  color: #64748B;
+}
+
+/* Table Design in Dark Mode */
+table {
+  color: #F8FAFC;
+}
+thead tr, thead {
+  background-color: rgba(30, 41, 59, 0.5);
+  border-color: #334155;
+}
+th {
+  color: #CBD5E1;
+  font-weight: 600;
+}
+td {
+  color: #E2E8F0;
+  border-color: #1E293B;
+}
+
+/* Printable PDF Document / White Cards in Dark Mode */
+html:not(.light-mode) :not(.printable-area):not(.printable-area *) input,
+html:not(.light-mode) :not(.printable-area):not(.printable-area *) select,
+html:not(.light-mode) :not(.printable-area):not(.printable-area *) textarea {
+  background-color: #020617 !important;
+  border-color: #1E293B !important;
+  color: #FFFFFF !important;
+}
+
+html:not(.light-mode) :not(.printable-area):not(.printable-area *) .bg-white:not(input):not(select):not(textarea):not(.printable-area) {
+  background-color: #4F46E5 !important;
+  color: #FFFFFF !important;
+}
+
+/* ==========================================================================
+   2. SEPARATED LIGHT MODE THEME (html.light-mode)
+   ========================================================================== */
+
+/* Light Mode Canvas */
+html.light-mode,
+html.light-mode body {
+  background-color: #F8FAFC !important;
+  color: #0F172A !important;
+}
+
+/* Background Gradients & Glows in Light Mode */
+html.light-mode .bg-dot-grid {
+  opacity: 0.1 !important;
+}
+
+/* Layout Containers: Cards, Header, Sidebar, Main Area */
+html.light-mode header,
+html.light-mode aside,
+html.light-mode main,
+html.light-mode .bento-card,
+html.light-mode .ledger-card,
+html.light-mode .bg-slate-950,
+html.light-mode .bg-slate-900,
+html.light-mode .bg-slate-950\/80,
+html.light-mode .bg-slate-900\/80,
+html.light-mode .bg-slate-900\/90,
+html.light-mode .bg-slate-950\/90,
+html.light-mode .bg-slate-950\/40,
+html.light-mode .bg-slate-950\/50,
+html.light-mode .bg-slate-950\/60,
+html.light-mode .bg-slate-900\/30,
+html.light-mode .bg-slate-900\/50,
+html.light-mode .bg-slate-900\/95,
+html.light-mode .bg-paper-card,
+html.light-mode .bg-paper,
+html.light-mode .bg-gradient-to-b {
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+  border-color: #E2E8F0 !important;
+  color: #0F172A !important;
+}
+
+/* Ensure Modal Overlays always remain translucent dark backdrop */
+html.light-mode div[style*="rgba(0, 0, 0"],
+html.light-mode .bg-black\/60 {
+  background-color: rgba(0, 0, 0, 0.65) !important;
+}
+
+/* Sub-panels and Secondary Surfaces in Light Mode */
+html.light-mode .bg-slate-800,
+html.light-mode .bg-slate-800\/40,
+html.light-mode .bg-slate-800\/50,
+html.light-mode .bg-slate-800\/60,
+html.light-mode .bg-slate-800\/80 {
+  background-color: #F1F5F9 !important;
+  border-color: #CBD5E1 !important;
+  color: #0F172A !important;
+}
+
+/* Typography Hierarchy in Light Mode */
+html.light-mode h1,
+html.light-mode h2,
+html.light-mode h3,
+html.light-mode h4,
+html.light-mode h5,
+html.light-mode h6 {
+  color: #0F172A !important;
+}
+
+html.light-mode .text-white,
+html.light-mode .text-slate-100,
+html.light-mode .text-slate-200 {
+  color: #0F172A !important;
+}
+
+html.light-mode p,
+html.light-mode label,
+html.light-mode span:not([class*="text-indigo"]):not([class*="text-emerald"]):not([class*="text-red"]):not([class*="text-amber"]):not([class*="text-purple"]):not([class*="bg-indigo"]):not([class*="bg-emerald"]):not([class*="bg-red"]) {
+  color: #334155;
+}
+
+html.light-mode .text-slate-300,
+html.light-mode .text-slate-400 {
+  color: #475569 !important;
+}
+
+html.light-mode .text-slate-500,
+html.light-mode .text-slate-600 {
+  color: #64748B !important;
+}
+
+/* High Contrast Accent Text in Light Mode */
+html.light-mode .text-indigo-200,
+html.light-mode .text-indigo-300,
+html.light-mode .text-indigo-400 {
+  color: #4338CA !important;
+}
+
+html.light-mode .text-emerald-300,
+html.light-mode .text-emerald-400 {
+  color: #047857 !important;
+}
+
+html.light-mode .text-amber-300,
+html.light-mode .text-amber-400 {
+  color: #B45309 !important;
+}
+
+html.light-mode .text-red-300,
+html.light-mode .text-red-400 {
+  color: #B91C1C !important;
+}
+
+html.light-mode .text-purple-300,
+html.light-mode .text-purple-400 {
+  color: #6B21A8 !important;
+}
+
+/* Fix Unreadable Text Classes in Light Mode */
+html.light-mode .text-slate-100,
+html.light-mode .text-slate-200,
+html.light-mode .text-slate-300,
+html.light-mode .text-slate-400,
+html.light-mode .text-white,
+html.light-mode .text-ink-900,
+html.light-mode .text-ink-800 {
+  color: #0F172A !important;
+}
+
+html.light-mode .text-ink-700,
+html.light-mode .text-ink-600,
+html.light-mode .text-ink-500,
+html.light-mode .text-ink-400,
+html.light-mode .text-ink-300,
+html.light-mode .text-ink-200,
+html.light-mode .text-ink-100 {
+  color: #475569 !important;
+}
+
+/* Fix Unreadable Text Classes in Dark Mode (exclude printable white documents) */
+html:not(.light-mode) :not(.printable-area):not(.printable-area *).text-slate-900,
+html:not(.light-mode) :not(.printable-area):not(.printable-area *).text-slate-800,
+html:not(.light-mode) :not(.printable-area):not(.printable-area *).text-slate-700,
+html:not(.light-mode) :not(.printable-area):not(.printable-area *).text-black,
+html:not(.light-mode) :not(.printable-area):not(.printable-area *).text-ink-900,
+html:not(.light-mode) :not(.printable-area):not(.printable-area *).text-ink-800,
+html:not(.light-mode) :not(.printable-area):not(.printable-area *).text-ink-700 {
+  color: #F8FAFC !important;
+}
+
+/* High-contrast Dark Typography for Printable & White Documents */
+.printable-area,
+.printable-area *,
+.bg-white .printable-area,
+.bg-white .printable-area * {
+  color: #0f172a !important;
+}
+
+.printable-area h1,
+.printable-area h2,
+.printable-area h3,
+.printable-area h4,
+.printable-area h5,
+.printable-area h6,
+.printable-area strong,
+.printable-area b,
+.printable-area th {
+  color: #000000 !important;
+}
+
+.printable-area p,
+.printable-area span,
+.printable-area li,
+.printable-area div,
+.printable-area td {
+  color: #1e293b !important;
+}
+
+.printable-area .bg-slate-100 {
+  background-color: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+}
+
+.printable-area table,
+.printable-area th,
+.printable-area td {
+  border-color: #cbd5e1 !important;
+}
+
+.printable-area th {
+  background-color: #e2e8f0 !important;
+  color: #000000 !important;
+  font-weight: 800 !important;
+}
+
+/* Scrollbars & Focus */
+:focus-visible {
+  outline: 2px solid #6366F1;
+  outline-offset: 2px;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.5);
+}
+
+/* ==========================================================================
+   4. PRINT STYLES FOR FACTURES / DEVIS
+   ========================================================================== */
+/* ==========================================================================
+   3. CLEAN PRINT & PDF GENERATION ENGINE
+   ========================================================================== */
+@media print {
+  @page {
+    size: A4;
+    margin: 1.2cm;
+  }
+
+  /* Hide app navigation, buttons, and sidebars */
+  header,
+  aside,
+  nav,
+  .print\:hidden,
+  .print-hidden,
+  button {
+    display: none !important;
+  }
+
+  body, html, main {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Reset fixed modal overlays for print */
+  .fixed.inset-0 {
+    position: static !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  /* Print document container styles - 100% Pure Black Text */
+  .printable-area,
+  .print-document {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .printable-area *,
+  .print-document *,
+  body *,
+  * {
+    color: #000000 !important;
+    text-shadow: none !important;
+    border-color: #000000 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+
+  th {
+    background-color: #E2E8F0 !important;
+    color: #000000 !important;
+    border: 1px solid #000000 !important;
+    padding: 6px 10px !important;
+    font-weight: 800 !important;
+  }
+
+  td {
+    border: 1px solid #000000 !important;
+    color: #000000 !important;
+    padding: 6px 10px !important;
+  }
+}
